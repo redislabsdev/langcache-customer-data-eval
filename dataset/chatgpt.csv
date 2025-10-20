@@ -1,4 +1,4 @@
-qsentence1,sentence2,label
+sentence1,sentence2,label
 "price of iphone 16 in the US (latest)","current US price for iPhone 16 today",0
 "price of iphone 16 in the US","iphone 16 cost in the United States",1
 "python sort list ascending","how to sort a list in python ascending",1
