@@ -48,6 +48,8 @@ uv sync
 uv sync --all-groups
 ```
 
+> **Note:** To install `llm-sim-eval`, you need to configure the Artifactory URL on line 31 in `pyproject.toml` with the URL from [https://artifactory.dev.redislabs.com/ui/packages/pypi:%2F%2Fllm-sim-eval](https://artifactory.dev.redislabs.com/ui/packages/pypi:%2F%2Fllm-sim-eval).
+
 > The script imports utilities from `src.customer_analysis` (e.g., `FileHandler`, `NeuralEmbedding`, plotting, and metrics helpers). The `uv sync` command automatically installs the package in editable mode.
 
 ### 2) Prepare your data
