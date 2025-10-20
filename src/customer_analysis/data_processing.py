@@ -1,5 +1,5 @@
 import pandas as pd
-from file_handler import FileHandler
+from src.customer_analysis.file_handler import FileHandler
 
 RANDOM_SEED = 42
 
