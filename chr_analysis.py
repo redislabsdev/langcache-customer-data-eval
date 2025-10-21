@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import torch
 
-from src.customer_analysis import FileHandler, NeuralEmbedding
+from src.customer_analysis import FileHandler, NeuralEmbedding, load_data
 
 RANDOM_SEED = 42
 
@@ -93,33 +93,6 @@ def plot_cache_hit_ratio(results_df: pd.DataFrame, output_path: str):
     handler.save_matplotlib_plot()
 
 
-def load_data(data_path: str, n_samples: int, sentence_column: str):
-    """
-    Load data for cache hit ratio analysis.
-    
-    Args:
-        data_path: Path to the CSV file
-        n_samples: Number of samples to analyze
-        sentence_column: Name of the column containing sentences
-        
-    Returns:
-        Tuple of (queries, cache) DataFrames
-    """
-    handler = FileHandler(data_path)
-    data = handler.read_csv()
-    
-    # Sample n_samples for queries
-    queries = data.sample(n_samples, random_state=RANDOM_SEED)
-    
-    # Drop queries from data to get cache
-    cache = data.drop(queries.index).reset_index(drop=True)
-    queries = queries.reset_index(drop=True)
-    
-    print(f"Loaded {len(queries)} queries and {len(cache)} cache entries")
-    
-    return queries, cache
-
-
 def main(args):
     """Main function for cache hit ratio analysis."""
     
@@ -132,7 +105,7 @@ def main(args):
     
     # Load data
     print("Loading data...")
-    queries, cache = load_data(args.data_path, args.n_samples, args.sentence_column)
+    queries, cache = load_data(args.data_path, args.n_samples)
     
     # Run matching
     print("Running matching...")

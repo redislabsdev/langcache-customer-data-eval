@@ -26,7 +26,7 @@ def postprocess_results_for_metrics(queries, llm_df, args):
     return final_df[[args.sentence_column, "matches", "similarity_score", "actual_label"]]
 
 
-def load_data(query_log_path, cache_path, n_samples):
+def load_data(query_log_path, cache_path: str = None, n_samples: int = 100):
     """
     Load query log and cache from either local paths or S3 URIs.
     """
@@ -42,7 +42,10 @@ def load_data(query_log_path, cache_path, n_samples):
         cache = None
 
     # Sample n_samples for queries
-    queries = query_log.sample(n_samples, random_state=RANDOM_SEED)
+    if n_samples < len(query_log):
+        queries = query_log.sample(n_samples, random_state=RANDOM_SEED)
+    else:
+        queries = query_log
 
     # If no explicit cache, use remaining rows
     if cache is None:
