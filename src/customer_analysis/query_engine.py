@@ -2,17 +2,18 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 import numpy as np
 import pandas as pd
-from sentence_transformers import SentenceTransformer
 from redisvl.index import SearchIndex
 from redisvl.query import VectorQuery
 from redisvl.schema import IndexSchema
+from sentence_transformers import SentenceTransformer
 
 try:
     import torch
+
     _HAS_TORCH = True
 except Exception:
     _HAS_TORCH = False
@@ -42,6 +43,7 @@ class RedisVectorIndex:
     additional_fields : list[dict]
         Extra schema fields if needed (e.g., [{"name":"row_index","type":"numeric"}]).
     """
+
     col_query: str
     index_name: str
     prefix: str
@@ -138,5 +140,3 @@ class RedisVectorIndex:
                 torch.cuda.empty_cache()
         except Exception:
             pass
-
-

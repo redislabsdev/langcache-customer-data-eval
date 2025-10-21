@@ -1,9 +1,12 @@
 import pandas as pd
+import torch
+
+from src.customer_analysis.embedding_interface import NeuralEmbedding
 from src.customer_analysis.file_handler import FileHandler
 from src.customer_analysis.query_engine import RedisVectorIndex
-from src.customer_analysis.embedding_interface import NeuralEmbedding
-import torch
+
 RANDOM_SEED = 42
+
 
 def run_matching_redis(queries: pd.DataFrame, cache: pd.DataFrame, args):
     """
@@ -55,7 +58,7 @@ def run_matching_redis(queries: pd.DataFrame, cache: pd.DataFrame, args):
                 continue
 
             hit = resp[0]
-            cosine_sim = 1.0 - float(hit["vector_distance"])   # convert to similarity
+            cosine_sim = 1.0 - float(hit["vector_distance"])  # convert to similarity
 
             best_scores.append(cosine_sim)
             matches.append(hit[text_col])
@@ -76,6 +79,7 @@ def run_matching_redis(queries: pd.DataFrame, cache: pd.DataFrame, args):
         rindex.drop()
 
     return out
+
 
 def run_matching(queries, cache, args):
     embedding_model = NeuralEmbedding(args.model_name, device="cuda" if torch.cuda.is_available() else "cpu")

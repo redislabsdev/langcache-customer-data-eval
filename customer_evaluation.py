@@ -15,9 +15,9 @@ from src.customer_analysis import (
     generate_plots,
     load_data,
     postprocess_results_for_metrics,
-    sweep_thresholds_on_results,
     run_matching,
     run_matching_redis,
+    sweep_thresholds_on_results,
 )
 
 RANDOM_SEED = 42
@@ -26,7 +26,6 @@ RANDOM_SEED = 42
 random.seed(RANDOM_SEED)
 np.random.seed(RANDOM_SEED)
 torch.manual_seed(RANDOM_SEED)
-
 
 
 def run_llm_as_a_judge(query_pairs, args):
@@ -131,34 +130,21 @@ if __name__ == "__main__":
     parser.add_argument(
         "--llm_name", type=str, required=False, default="microsoft/Phi-4-mini-instruct", help="Name of the LLM to use"
     )
-    parser.add_argument(
-        "--use_redis",
-        action="store_true",
-        help="Use Redis for matching (default: False)"
-    )
+    parser.add_argument("--use_redis", action="store_true", help="Use Redis for matching (default: False)")
     parser.add_argument(
         "--redis_url",
         type=str,
         default="redis://localhost:6379",
-        help="Redis connection URL (default: redis://localhost:6379)"
+        help="Redis connection URL (default: redis://localhost:6379)",
     )
     parser.add_argument(
-        "--redis_index_name",
-        type=str,
-        default="idx_cache_match",
-        help="Redis index name (default: idx_cache_match)"
+        "--redis_index_name", type=str, default="idx_cache_match", help="Redis index name (default: idx_cache_match)"
     )
     parser.add_argument(
-        "--redis_doc_prefix",
-        type=str,
-        default="cache:",
-        help="Redis document key prefix (default: cache:)"
+        "--redis_doc_prefix", type=str, default="cache:", help="Redis document key prefix (default: cache:)"
     )
     parser.add_argument(
-        "--redis_batch_size",
-        type=int,
-        default=256,
-        help="Batch size for Redis vector operations (default: 256)"
+        "--redis_batch_size", type=int, default=256, help="Batch size for Redis vector operations (default: 256)"
     )
     args = parser.parse_args()
 

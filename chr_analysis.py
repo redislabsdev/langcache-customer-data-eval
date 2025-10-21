@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import torch
 
-from src.customer_analysis import FileHandler, run_matching_redis, run_matching
+from src.customer_analysis import FileHandler, run_matching, run_matching_redis
 
 RANDOM_SEED = 42
 
@@ -27,11 +27,11 @@ def calculate_cache_hit_ratio_for_threshold(similarity_scores: np.ndarray, thres
 def sweep_cache_hit_ratios(similarity_scores: np.ndarray, steps: int = 200) -> pd.DataFrame:
     """
     Perform threshold sweep and calculate cache hit ratios.
-    
+
     Args:
         similarity_scores: Array of similarity scores
         steps: Number of threshold steps
-        
+
     Returns:
         DataFrame with columns: threshold, cache_hit_ratio
     """
@@ -39,22 +39,19 @@ def sweep_cache_hit_ratios(similarity_scores: np.ndarray, steps: int = 200) -> p
     min_score = similarity_scores.min()
     max_score = 1.0
     thresholds = np.linspace(min_score, max_score, steps)
-    
+
     results = []
     for threshold in thresholds:
         chr = calculate_cache_hit_ratio_for_threshold(similarity_scores, threshold)
-        results.append({
-            "threshold": threshold,
-            "cache_hit_ratio": chr
-        })
-    
+        results.append({"threshold": threshold, "cache_hit_ratio": chr})
+
     return pd.DataFrame(results)
 
 
 def plot_cache_hit_ratio(results_df: pd.DataFrame, output_path: str):
     """
     Plot cache hit ratio vs threshold.
-    
+
     Args:
         results_df: DataFrame with threshold and cache_hit_ratio columns
         output_path: Path to save the plot
@@ -66,7 +63,7 @@ def plot_cache_hit_ratio(results_df: pd.DataFrame, output_path: str):
     plt.title("Cache Hit Ratio vs Threshold", fontsize=14)
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
-    
+
     handler = FileHandler(output_path)
     handler.save_matplotlib_plot()
 
@@ -74,75 +71,75 @@ def plot_cache_hit_ratio(results_df: pd.DataFrame, output_path: str):
 def load_data(data_path: str, n_samples: int):
     """
     Load data for cache hit ratio analysis.
-    
+
     Args:
         data_path: Path to the CSV file
         n_samples: Number of samples to analyze
-        
+
     Returns:
         Tuple of (queries, cache) DataFrames
     """
     handler = FileHandler(data_path)
     data = handler.read_csv()
-    
+
     # Take first n_samples as queries
     queries = data.head(n_samples).reset_index(drop=True)
-    
+
     # Use rest of the data as cache
     cache = data.iloc[n_samples:].reset_index(drop=True)
-    
+
     print(f"Loaded {len(queries)} queries and {len(cache)} cache entries")
-    
+
     return queries, cache
 
 
 def main(args):
     """Main function for cache hit ratio analysis."""
-    
+
     # Construct output paths
     def make_output_path(filename):
         if args.output_dir.startswith("s3://"):
             return f"{args.output_dir.rstrip('/')}/{filename}"
         else:
             return os.path.join(args.output_dir, filename)
-    
+
     # Load data
     print("Loading data...")
     queries, cache = load_data(args.data_path, args.n_samples)
-    
+
     assert len(cache) > 0, "Cache is empty"
     assert len(queries) > 0, "Queries are empty"
-    
+
     # Run matching
     print("Running matching...")
     if args.use_redis:
         queries = run_matching_redis(queries, cache, args)
     else:
         queries = run_matching(queries, cache, args)
-    
+
     # Save matches
     matches_path = make_output_path("chr_matches.csv")
     matches_handler = FileHandler(matches_path)
     matches_handler.write_csv(queries[[args.sentence_column, "matches", "best_scores"]])
-    
+
     # Sweep cache hit ratios
     similarity_scores = queries["best_scores"].values
     results_df = sweep_cache_hit_ratios(similarity_scores, steps=args.sweep_steps)
-    
+
     # Save sweep results
     sweep_path = make_output_path("chr_sweep.csv")
     sweep_handler = FileHandler(sweep_path)
     sweep_handler.write_csv(results_df)
-    
+
     # Generate plot
     print("Generating plot...")
     plot_path = make_output_path("chr_vs_threshold.png")
     plot_cache_hit_ratio(results_df, plot_path)
-    
+
     # Print summary statistics
-    print("\n" + "="*50)
+    print("\n" + "=" * 50)
     print("Cache Hit Ratio Analysis Summary")
-    print("="*50)
+    print("=" * 50)
     print(f"Total queries analyzed: {len(queries)}")
     print(f"Similarity score range: [{similarity_scores.min():.4f}, {similarity_scores.max():.4f}]")
     print(f"Mean similarity score: {similarity_scores.mean():.4f}")
@@ -151,79 +148,39 @@ def main(args):
     for threshold in [0.5, 0.6, 0.7, 0.8, 0.9]:
         chr = calculate_cache_hit_ratio_for_threshold(similarity_scores, threshold)
         print(f"  Threshold {threshold:.1f}: {chr:.2%}")
-    print("="*50)
-    
+    print("=" * 50)
+
     print("\nDone!")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Cache Hit Ratio Analysis")
+    parser.add_argument("--data_path", type=str, required=True, help="Path to the data CSV file (local or S3)")
+    parser.add_argument("--sentence_column", type=str, required=True, help="Column name for the sentences to analyze")
+    parser.add_argument("--output_dir", type=str, required=True, help="Path to the output directory (local or S3)")
+    parser.add_argument("--n_samples", type=int, default=100, help="Number of samples to analyze (default: 100)")
     parser.add_argument(
-        "--data_path", 
-        type=str, 
-        required=True, 
-        help="Path to the data CSV file (local or S3)"
+        "--model_name", type=str, default="redis/langcache-embed-v3.1", help="Name of the embedding model to use"
     )
     parser.add_argument(
-        "--sentence_column", 
-        type=str, 
-        required=True, 
-        help="Column name for the sentences to analyze"
+        "--sweep_steps", type=int, default=200, help="Number of threshold steps in sweep (default: 200)"
     )
-    parser.add_argument(
-        "--output_dir", 
-        type=str, 
-        required=True, 
-        help="Path to the output directory (local or S3)"
-    )
-    parser.add_argument(
-        "--n_samples", 
-        type=int, 
-        default=100, 
-        help="Number of samples to analyze (default: 100)"
-    )
-    parser.add_argument(
-        "--model_name", 
-        type=str, 
-        default="redis/langcache-embed-v3.1", 
-        help="Name of the embedding model to use"
-    )
-    parser.add_argument(
-        "--sweep_steps", 
-        type=int, 
-        default=200, 
-        help="Number of threshold steps in sweep (default: 200)"
-    )
-    parser.add_argument(
-        "--use_redis",
-        action="store_true",
-        help="Use Redis for matching (default: False)"
-    )   
+    parser.add_argument("--use_redis", action="store_true", help="Use Redis for matching (default: False)")
     parser.add_argument(
         "--redis_url",
         type=str,
         default="redis://localhost:6379",
-        help="Redis connection URL (default: redis://localhost:6379)"
+        help="Redis connection URL (default: redis://localhost:6379)",
     )
     parser.add_argument(
-        "--redis_index_name",
-        type=str,
-        default="idx_cache_match",
-        help="Redis index name (default: idx_cache_match)"
+        "--redis_index_name", type=str, default="idx_cache_match", help="Redis index name (default: idx_cache_match)"
     )
     parser.add_argument(
-        "--redis_doc_prefix",
-        type=str,
-        default="cache:",
-        help="Redis document key prefix (default: cache:)"
+        "--redis_doc_prefix", type=str, default="cache:", help="Redis document key prefix (default: cache:)"
     )
     parser.add_argument(
-        "--redis_batch_size",
-        type=int,
-        default=256,
-        help="Batch size for Redis vector operations (default: 256)"
+        "--redis_batch_size", type=int, default=256, help="Batch size for Redis vector operations (default: 256)"
     )
-    
+
     args = parser.parse_args()
     main(args)
-
