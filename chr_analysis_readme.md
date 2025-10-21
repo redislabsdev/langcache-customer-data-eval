@@ -52,17 +52,21 @@ Cache Hit Ratios at common thresholds:
   Threshold 0.9: 12.00%
 ==================================================
 ```
-### Arguments
+### chr_analysis.py
 
-| Flag                | Type | Required | Default                          | Description                                                    |
-| ------------------- | ---: | :------: | -------------------------------- | -------------------------------------------------------------- |
-| `--data_path`       |  str |     ✅    | —                                | Path to the CSV file with sentences (local or `s3://…`).       |
-| `--sentence_column` |  str |     ✅    | —                                | Name of the column containing sentences to analyze.            |
-| `--output_dir`      |  str |     ✅    | —                                | Where to write CSVs/plots (local or `s3://…`).                 |
-| `--n_samples`       |  int |          | `100`                            | Number of queries to analyze (taken from start of dataset).    |
-| `--model_name`      |  str |          | `"redis/langcache-embed-v3.1"`   | Embedding model name used to perform the ranking               |
-| `--sweep_steps`     |  int |          | `200`                            | Number of threshold steps in the sweep.                        |
-
+| Flag                   | Type | Required | Default                           | Description                                                         |
+| ---------------------- | ---: | :------: | --------------------------------- | ------------------------------------------------------------------- |
+| `--data_path`          |  str |     ✅    | —                                 | Path to the **data CSV** (local or `s3://…`).                       |
+| `--sentence_column`    |  str |     ✅    | —                                 | Name of the text column to evaluate.                                |
+| `--output_dir`         |  str |     ✅    | —                                 | Where to write CSVs/plots (local or `s3://…`).                      |
+| `--n_samples`          |  int |          | `100`                             | Number of samples to analyze.                                       |
+| `--model_name`         |  str |          | `"redis/langcache-embed-v3.1"`    | Embedding model to use.                                             |
+| `--sweep_steps`        |  int |          | `200`                             | Number of threshold steps in sweep.                                 |
+| `--use_redis`          | flag |          | `False`                           | Use Redis for vector matching (default: in-memory matching).        |
+| `--redis_url`          |  str |          | `"redis://localhost:6379"`        | Redis connection URL for vector search.                             |
+| `--redis_index_name`   |  str |          | `"idx_cache_match"`               | Redis index name for vector storage.                                |
+| `--redis_doc_prefix`   |  str |          | `"cache:"`                        | Redis document key prefix.                                          |
+| `--redis_batch_size`   |  int |          | `256`                             | Batch size for Redis vector operations.                             |
 ---
 ### How it works
 

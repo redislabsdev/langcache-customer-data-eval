@@ -25,12 +25,12 @@ def run_matching_redis(queries: pd.DataFrame, cache: pd.DataFrame, args):
 
     rindex = RedisVectorIndex(
         col_query=text_col,
-        index_name=getattr(args, "index_name", "idx_cache_match"),
-        prefix=getattr(args, "prefix", "cache:"),
-        model_name=args.model_name,  # <- passed in constructor
+        index_name=getattr(args, "redis_index_name", "idx_cache_match"),
+        prefix=getattr(args, "redis_doc_prefix", "cache:"),
+        model_name=args.model_name,
         redis_url=getattr(args, "redis_url", "redis://localhost:6379"),
         device=getattr(args, "device", None),
-        batch_size=getattr(args, "batch_size", 256),
+        batch_size=getattr(args, "redis_batch_size", 256),
         additional_fields=[],
     )
 

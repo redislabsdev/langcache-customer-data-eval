@@ -57,7 +57,23 @@ uv sync --all-groups
 
 > **Note:** To install `llm-sim-eval`, you need to follow the installation steps in [the Redis artifactory](https://artifactory.dev.redislabs.com/ui/packages/pypi:%2F%2Fllm-sim-eval).
 
-### 2) Prepare your data
+### 2) Start Redis (Optional but Recommended)
+
+The matching pipeline can use Redis for fast vector similarity search. To enable Redis-based matching, add the `--use_redis` flag and ensure Redis is running:
+
+```bash
+# Using Docker (recommended)
+docker run -d -p 6379:6379 redis/redis-stack:latest
+
+# Or install Redis locally
+# macOS: brew install redis && redis-server
+# Ubuntu: sudo apt-get install redis-server && redis-server
+# Windows: Download from https://redis.io/download
+```
+
+> **Note:** Redis connection defaults to `redis://localhost:6379`. You can customize this with `--redis_url`.
+
+### 3) Prepare your data
 
 * **Queries CSV** (`--query_log_path`): must include your **sentence column** (name passed via `--sentence_column`).
 * **Cache CSV** (`--cache_path`): a catalog of reference sentences/utterances. Must at least include the **same sentence column**.
@@ -76,9 +92,21 @@ id,text
 102,"our store hours"
 ```
 
-### 3) Run
+### 4) Run
 
 ```bash
+# With Redis (recommended for better performance)
+uv run customer_evaluation.py \
+  --query_log_path ./data/queries.csv \
+  --cache_path ./data/cache.csv \
+  --sentence_column text \
+  --output_dir ./outputs \
+  --n_samples 1000 \
+  --model_name "redis/langcache-embed-v1" \
+  --llm_name "microsoft/Phi-4-mini-instruct" \
+  --use_redis
+
+# Without Redis (in-memory matching)
 uv run customer_evaluation.py \
   --query_log_path ./data/queries.csv \
   --cache_path ./data/cache.csv \
@@ -135,15 +163,22 @@ Finally prints `Done!`.
 
 ## Command‑line arguments
 
-| Flag                | Type | Required | Default                           | Description                                                         |
-| ------------------- | ---: | :------: | --------------------------------- | ------------------------------------------------------------------- |
-| `--query_log_path`  |  str |     ✅    | —                                 | Path to the **queries CSV** (local or `s3://…`).                    |
-| `--sentence_column` |  str |     ✅    | —                                 | Name of the text column to evaluate (must exist in both CSVs).      |
-| `--output_dir`      |  str |     ✅    | —                                 | Where to write CSVs/plots (local or `s3://…`).                      |
-| `--n_samples`       |  int |          | `1000`                            | Max queries to evaluate (also used as an “early stop” in matching). |
-| `--model_name`      |  str |          | `"redis/langcache-embed-v1"`      | Embedding model passed to `NeuralEmbedding`.                        |
-| `--cache_path`      |  str |          | `None`                            | Path to the **cache CSV** (local or `s3://…`).                      |
-| `--llm_name`        |  str |          | `"microsoft/Phi-4-mini-instruct"` | Local LLM identifier used by the judging pipeline.                  |
+### customer_evaluation.py
+
+| Flag                   | Type | Required | Default                           | Description                                                         |
+| ---------------------- | ---: | :------: | --------------------------------- | ------------------------------------------------------------------- |
+| `--query_log_path`     |  str |     ✅    | —                                 | Path to the **queries CSV** (local or `s3://…`).                    |
+| `--sentence_column`    |  str |     ✅    | —                                 | Name of the text column to evaluate (must exist in both CSVs).      |
+| `--output_dir`         |  str |     ✅    | —                                 | Where to write CSVs/plots (local or `s3://…`).                      |
+| `--n_samples`          |  int |          | `1000`                            | Max queries to evaluate (also used as an "early stop" in matching). |
+| `--model_name`         |  str |          | `"redis/langcache-embed-v1"`      | Embedding model passed to `NeuralEmbedding`.                        |
+| `--cache_path`         |  str |          | `None`                            | Path to the **cache CSV** (local or `s3://…`).                      |
+| `--llm_name`           |  str |          | `"microsoft/Phi-4-mini-instruct"` | Local LLM identifier used by the judging pipeline.                  |
+| `--use_redis`          | flag |          | `False`                           | Use Redis for vector matching (default: in-memory matching).        |
+| `--redis_url`          |  str |          | `"redis://localhost:6379"`        | Redis connection URL for vector search.                             |
+| `--redis_index_name`   |  str |          | `"idx_cache_match"`               | Redis index name for vector storage.                                |
+| `--redis_doc_prefix`   |  str |          | `"cache:"`                        | Redis document key prefix.                                          |
+| `--redis_batch_size`   |  int |          | `256`                             | Batch size for Redis vector operations.                             |
 
 > Tip: `--model_name` and `--llm_name` must be supported by your environment/backends. The script auto‑selects `cuda` when `torch.cuda.is_available()` returns true.
 
@@ -185,12 +220,16 @@ Finally prints `Done!`.
 
 ## Troubleshooting
 
-* *My run finishes matching but shows “Number of discarded queries…”*:
+* *"Connection refused" or "Error connecting to Redis"*:
+  Ensure Redis is running on the specified `--redis_url`. Test with: `redis-cli ping` (should return `PONG`).
+* *My run finishes matching but shows "Number of discarded queries…"*:
   That count is how many judge calls produced unusable/failed responses; the pipeline continues with successful ones.
 * *Plots are empty or flat*:
   Ensure your inputs contain valid ground‑truth signals (`actual_label` or whatever your metrics function expects), and that scores vary across pairs.
 * *S3 permissions errors*:
   Confirm AWS credentials in the environment and that your `FileHandler` is configured for those credentials/regions.
+* *Redis index conflicts*:
+  If you see errors about existing indexes, change `--redis_index_name` to a unique value or manually delete the old index with: `redis-cli FT.DROPINDEX <index_name> DD`
 
 ---
 

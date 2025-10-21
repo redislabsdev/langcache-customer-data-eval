@@ -70,7 +70,10 @@ def main(args):
     # Stage one: Matching
     # ------------------------------
     print("Stage one: Matching...")
-    queries = run_matching(queries, cache, args)
+    if args.use_redis:
+        queries = run_matching_redis(queries, cache, args)
+    else:
+        queries = run_matching(queries, cache, args)
 
     matches_handler = FileHandler(make_output_path("matches.csv"))
     matches_handler.write_csv(queries[[args.sentence_column, "matches", "best_scores"]])
@@ -127,6 +130,35 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--llm_name", type=str, required=False, default="microsoft/Phi-4-mini-instruct", help="Name of the LLM to use"
+    )
+    parser.add_argument(
+        "--use_redis",
+        action="store_true",
+        help="Use Redis for matching (default: False)"
+    )
+    parser.add_argument(
+        "--redis_url",
+        type=str,
+        default="redis://localhost:6379",
+        help="Redis connection URL (default: redis://localhost:6379)"
+    )
+    parser.add_argument(
+        "--redis_index_name",
+        type=str,
+        default="idx_cache_match",
+        help="Redis index name (default: idx_cache_match)"
+    )
+    parser.add_argument(
+        "--redis_doc_prefix",
+        type=str,
+        default="cache:",
+        help="Redis document key prefix (default: cache:)"
+    )
+    parser.add_argument(
+        "--redis_batch_size",
+        type=int,
+        default=256,
+        help="Batch size for Redis vector operations (default: 256)"
     )
     args = parser.parse_args()
 
