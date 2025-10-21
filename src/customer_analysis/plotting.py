@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from file_handler import FileHandler
+from src.customer_analysis.file_handler import FileHandler
 
 
 def generate_plots(results_df, precision_plot_path, metrics_plot_path):
