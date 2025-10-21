@@ -63,7 +63,7 @@ uv sync
 uv sync --all-groups
 ```
 
-> **Note:** To install `llm-sim-eval`, you need to follow the installation steps in [the Redis artifactory](https://artifactory.dev.redislabs.com/ui/packages/pypi:%2F%2Fllm-sim-eval).
+> **Note:** To install `llm-sim-eval`, you need to `uv add llm-sim-eval` with the correct authentication token from the installation steps in [the Redis artifactory](https://artifactory.dev.redislabs.com/ui/packages/pypi:%2F%2Fllm-sim-eval).
 
 ### 2) Prepare your data
 

@@ -16,7 +16,7 @@ For faster analysis without the LLM-as-a-Judge step, use `chr_analysis.py`. This
 
 ```bash
 uv run chr_analysis.py \
-  --data_path ./dataset/chatgpt.csv \
+  --query_log_path ./dataset/chatgpt.csv \
   --sentence_column sentence1 \
   --output_dir ./outputs \
   --n_samples 100 \
@@ -28,7 +28,7 @@ uv run chr_analysis.py \
 
 ```bash
 uv run chr_analysis.py \
-  --data_path s3://my-bucket/data.csv \
+  --query_log_path s3://my-bucket/data.csv \
   --sentence_column text \
   --output_dir s3://my-bucket/chr-results
 ```
@@ -56,7 +56,7 @@ Cache Hit Ratios at common thresholds:
 
 | Flag                | Type | Required | Default                          | Description                                                    |
 | ------------------- | ---: | :------: | -------------------------------- | -------------------------------------------------------------- |
-| `--data_path`       |  str |     ✅    | —                                | Path to the CSV file with sentences (local or `s3://…`).       |
+| `--query_log_path`       |  str |     ✅    | —                                | Path to the CSV file with sentences (local or `s3://…`).       |
 | `--sentence_column` |  str |     ✅    | —                                | Name of the column containing sentences to analyze.            |
 | `--output_dir`      |  str |     ✅    | —                                | Where to write CSVs/plots (local or `s3://…`).                 |
 | `--n_samples`       |  int |          | `100`                            | Number of queries to analyze (taken from start of dataset).    |
@@ -66,7 +66,7 @@ Cache Hit Ratios at common thresholds:
 ---
 ### How it works
 
-1. **Load data**: Reads `--data_path` and splits it into:
+1. **Load data**: Reads `--query_log_path` and splits it into:
    - **Queries**: First `n_samples` rows
    - **Cache**: Remaining rows
 
