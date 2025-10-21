@@ -1,4 +1,10 @@
 # Customer Evaluation Pipeline
+Evaluate how a semantic cache performs on your dataset by computing the two key KPIs over a threshold sweep and producing plots/CSVs to pick an operating point:
+
+- **Cache Hit Ratio (CHR)**: fraction of queries whose similarity_score ≥ τ — i.e., the share served from cache at threshold τ.
+- **Precision**: among those hits, the fraction that are actually correct (truly similar).
+
+Why an LLM? We use an **LLM-as-a-Judge** to produce proxy ground‑truth labels for each `(query, match)` pair, so you can calculate precision without manual annotation.
 
 Run evaluations for semantic caching with neural embeddings and optional LLM-as-a-Judge:
 
@@ -6,6 +12,8 @@ Run evaluations for semantic caching with neural embeddings and optional LLM-as-
 - **`chr_analysis.py`**: Fast cache hit ratio analysis without LLM judge → threshold sweep and CHR plots
 
 Both scripts support **local or S3** inputs/outputs and optional **GPU acceleration**.
+
+Under the hood, the pipeline (1) finds nearest matches for each user query using neural embeddings, (2) asks an LLM to judge similarity, (3) computes metrics across score thresholds, and (4) generates plots — with support for **local or S3** inputs/outputs and optional **GPU acceleration**.
 
 ## ✨ Features
 
@@ -163,7 +171,23 @@ Finally prints `Done!`.
 * `threshold_sweep_results.csv` — thresholded metrics across the sweep
 * `precision_vs_cache_hit_ratio.png` and `metrics_over_threshold.png`
 
-> When `--output_dir` starts with `s3://`, paths are joined with forward slashes; local directories use `os.path.join` logic.
+### Metrics, charts, and files generated
+
+* **Metrics** (computed per threshold and saved in `threshold_sweep_results.csv`):
+  * `threshold`
+  * `precision`, `recall`, `f1_score`, `f0_5_score`
+  * `f05_chr_score` — harmonic mean of precision and cache hit ratio (β=0.5)
+  * `cache_hit_ratio`
+  * `tp`, `fp`, `fn`, `tn`, `accuracy`
+
+* **Charts** (saved under `--output_dir`):
+  * `precision_vs_cache_hit_ratio.png` — Precision vs Cache Hit Ratio
+  * `metrics_over_threshold.png` — Over threshold: Precision, Cache Hit Ratio, and `precision * cache_hit_ratio`
+
+* **Files** (saved under `--output_dir`):
+  * `matches.csv` — `[<sentence_column>, matches, best_scores]`
+  * `llm_as_a_judge_results.csv` — `[<sentence_column>, matches, similarity_score, actual_label]`
+  * `threshold_sweep_results.csv` — one row per threshold with the metrics listed above
 
 ---
 
