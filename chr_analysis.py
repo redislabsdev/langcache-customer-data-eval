@@ -108,11 +108,12 @@ def load_data(data_path: str, n_samples: int, sentence_column: str):
     handler = FileHandler(data_path)
     data = handler.read_csv()
     
-    # Take first n_samples as queries
-    queries = data.head(n_samples).reset_index(drop=True)
+    # Sample n_samples for queries
+    queries = data.sample(n_samples, random_state=RANDOM_SEED)
     
-    # Use rest of the data as cache
-    cache = data.iloc[n_samples:].reset_index(drop=True)
+    # Drop queries from data to get cache
+    cache = data.drop(queries.index).reset_index(drop=True)
+    queries = queries.reset_index(drop=True)
     
     print(f"Loaded {len(queries)} queries and {len(cache)} cache entries")
     

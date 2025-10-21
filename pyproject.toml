@@ -24,9 +24,6 @@ only-include = [
     "plot_precision_vs_cache_hit_ratio.py",
 ]
 
-[tool.uv.sources]
-llm-sim-eval = { index = "redis-artifactory" }
-
 [dependency-groups]
 dev = [
     "black>=25.1.0",
