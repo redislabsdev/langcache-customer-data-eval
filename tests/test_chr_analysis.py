@@ -94,13 +94,13 @@ class TestCacheHitRatioAnalysis(unittest.TestCase):
         test_data.to_csv(test_csv_path, index=False)
         
         # Load data
-        queries, cache = load_data(test_csv_path, n_samples=3, sentence_column="sentence1")
+        queries, cache = load_data(test_csv_path, n_samples=3)
         
         # Check that queries has correct size
         self.assertEqual(len(queries), 3)
         
-        # Check that cache has all data
-        self.assertEqual(len(cache), 5)
+        # Check that cache has remaining data
+        self.assertEqual(len(cache), 2)
         
         # Check that queries are from the beginning
         self.assertEqual(queries["sentence1"].tolist(), ["query1", "query2", "query3"])
@@ -109,16 +109,16 @@ class TestCacheHitRatioAnalysis(unittest.TestCase):
         """Test loading all data when n_samples >= total rows."""
         test_csv_path = os.path.join(self.test_dir, "test_data_small.csv")
         test_data = pd.DataFrame({
-            "text": ["a", "b", "c"],
+            "sentence1": ["a", "b", "c"],
         })
         test_data.to_csv(test_csv_path, index=False)
         
         # Request more samples than available
-        queries, cache = load_data(test_csv_path, n_samples=10, sentence_column="text")
+        queries, cache = load_data(test_csv_path, n_samples=10)
         
         # Should only get 3 (all available)
         self.assertEqual(len(queries), 3)
-        self.assertEqual(len(cache), 3)
+        self.assertEqual(len(cache), 0)
 
     def test_cache_hit_ratio_edge_cases(self):
         """Test edge cases for cache hit ratio calculation."""

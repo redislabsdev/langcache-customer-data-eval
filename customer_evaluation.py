@@ -16,6 +16,8 @@ from src.customer_analysis import (
     load_data,
     postprocess_results_for_metrics,
     sweep_thresholds_on_results,
+    run_matching,
+    run_matching_redis,
 )
 
 RANDOM_SEED = 42
@@ -25,26 +27,6 @@ random.seed(RANDOM_SEED)
 np.random.seed(RANDOM_SEED)
 torch.manual_seed(RANDOM_SEED)
 
-
-def run_matching(queries, cache, args):
-    embedding_model = NeuralEmbedding(args.model_name, device="cuda" if torch.cuda.is_available() else "cpu")
-
-    queries["best_scores"] = 0
-
-    best_indices, best_scores, decision_methods = embedding_model.calculate_best_matches_with_cache_large_dataset(
-        queries=queries[args.sentence_column].to_list(),
-        cache=cache[args.sentence_column].to_list(),
-        batch_size=512,
-        early_stop=args.n_samples,
-    )
-
-    queries["best_scores"] = best_scores
-    queries["matches"] = cache.iloc[best_indices][args.sentence_column].to_list()
-
-    del embedding_model
-    torch.cuda.empty_cache()
-
-    return queries
 
 
 def run_llm_as_a_judge(query_pairs, args):

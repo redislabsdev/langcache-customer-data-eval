@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import torch
 
-from src.customer_analysis import FileHandler, NeuralEmbedding
+from src.customer_analysis import FileHandler, run_matching_redis, run_matching
 
 RANDOM_SEED = 42
 
@@ -15,28 +15,6 @@ RANDOM_SEED = 42
 random.seed(RANDOM_SEED)
 np.random.seed(RANDOM_SEED)
 torch.manual_seed(RANDOM_SEED)
-
-
-def run_matching(queries, cache, args):
-    """Run embedding-based matching to find best cache matches for each query."""
-    embedding_model = NeuralEmbedding(args.model_name, device="cuda" if torch.cuda.is_available() else "cpu")
-
-    queries["best_scores"] = 0
-
-    best_indices, best_scores, decision_methods = embedding_model.calculate_best_matches_with_cache_large_dataset(
-        queries=queries[args.sentence_column].to_list(),
-        cache=cache[args.sentence_column].to_list(),
-        batch_size=512,
-        early_stop=args.n_samples,
-    )
-
-    queries["best_scores"] = best_scores
-    queries["matches"] = cache.iloc[best_indices][args.sentence_column].to_list()
-
-    del embedding_model
-    torch.cuda.empty_cache()
-
-    return queries
 
 
 def calculate_cache_hit_ratio_for_threshold(similarity_scores: np.ndarray, threshold: float) -> float:
@@ -93,14 +71,13 @@ def plot_cache_hit_ratio(results_df: pd.DataFrame, output_path: str):
     handler.save_matplotlib_plot()
 
 
-def load_data(data_path: str, n_samples: int, sentence_column: str):
+def load_data(data_path: str, n_samples: int):
     """
     Load data for cache hit ratio analysis.
     
     Args:
         data_path: Path to the CSV file
         n_samples: Number of samples to analyze
-        sentence_column: Name of the column containing sentences
         
     Returns:
         Tuple of (queries, cache) DataFrames
@@ -131,11 +108,14 @@ def main(args):
     
     # Load data
     print("Loading data...")
-    queries, cache = load_data(args.data_path, args.n_samples, args.sentence_column)
+    queries, cache = load_data(args.data_path, args.n_samples)
+    
+    assert len(cache) > 0, "Cache is empty"
+    assert len(queries) > 0, "Queries are empty"
     
     # Run matching
     print("Running matching...")
-    queries = run_matching(queries, cache, args)
+    queries = run_matching_redis(queries, cache, args)
     
     # Save matches
     matches_path = make_output_path("chr_matches.csv")
