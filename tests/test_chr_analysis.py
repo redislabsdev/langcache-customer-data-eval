@@ -105,7 +105,6 @@ class TestCacheHitRatioAnalysis(unittest.TestCase):
         # Check that queries and cache don't overlap (no common indices)
         query_sentences = set(queries["sentence1"])
         cache_sentences = set(cache["sentence1"])
-        print(query_sentences, cache_sentences, query_sentences.intersection(cache_sentences))
         self.assertEqual(len(query_sentences.intersection(cache_sentences)), 0)
         
         # Check that all original data is accounted for

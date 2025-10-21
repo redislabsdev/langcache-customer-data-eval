@@ -26,7 +26,7 @@ def postprocess_results_for_metrics(queries, llm_df, args):
     return final_df[[args.sentence_column, "matches", "similarity_score", "actual_label"]]
 
 
-def load_data(query_log_path, cache_path: str = None, n_samples: int = 100):
+def load_data(query_log_path: str, cache_path: str = None, n_samples: int = 100):
     """
     Load query log and cache from either local paths or S3 URIs.
     """

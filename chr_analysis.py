@@ -105,7 +105,7 @@ def main(args):
     
     # Load data
     print("Loading data...")
-    queries, cache = load_data(args.data_path, args.n_samples)
+    queries, cache = load_data(query_log_path=args.query_log_path, cache_path=args.cache_path, n_samples=args.n_samples)
     
     # Run matching
     print("Running matching...")
@@ -150,10 +150,16 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Cache Hit Ratio Analysis")
     parser.add_argument(
-        "--data_path", 
+        "--query_log_path", 
         type=str, 
         required=True, 
-        help="Path to the data CSV file (local or S3)"
+        help="Path to the query log CSV file (local or S3)"
+    )
+    parser.add_argument(
+        "--cache_path", 
+        type=str, 
+        default=None, 
+        help="Path to the cache CSV file (local or S3)"
     )
     parser.add_argument(
         "--sentence_column", 
