@@ -16,7 +16,7 @@ class NeuralEmbedding:
         """
         Initialize the NeuralEmbedding model.
         """
-        self.model = SentenceTransformer(model_name, device=device)
+        self.model = SentenceTransformer(model_name, device=device, local_files_only=False)
         self.embeddings = None
 
     def encode(self, sentences: list[str], **kwargs) -> np.ndarray:
