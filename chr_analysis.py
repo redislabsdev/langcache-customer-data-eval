@@ -27,7 +27,7 @@ def run_matching(queries, cache, args):
         queries=queries[args.sentence_column].to_list(),
         cache=cache[args.sentence_column].to_list(),
         batch_size=512,
-        early_stop=args.n_samples,
+        early_stop=min(args.n_samples, len(queries)),
     )
 
     queries["best_scores"] = best_scores
