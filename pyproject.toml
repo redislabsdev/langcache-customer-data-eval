@@ -20,7 +20,7 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 only-include = [
-    "customer_evaluation.py",
+    "cache_evaluation.py",
     "plot_precision_vs_cache_hit_ratio.py",
 ]
 

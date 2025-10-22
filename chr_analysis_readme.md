@@ -6,7 +6,7 @@ For faster analysis without the LLM-as-a-Judge step, use `chr_analysis.py`. This
 2. Sweeping over threshold values to compute cache hit ratios
 3. Generating plots and CSV outputs
 
-**Key differences from `customer_evaluation.py`:**
+**Key differences from `cache_evaluation.py`:**
 - ❌ No LLM judge step → much faster, no GPU/LLM needed for judgment
 - ✅ Only evaluates cache hit ratio as a function of similarity threshold
 - ✅ Uses the same embedding and matching infrastructure
@@ -84,7 +84,7 @@ Cache Hit Ratios at common thresholds:
    - Cache hit ratios at common thresholds (0.5, 0.6, 0.7, 0.8, 0.9)
 
 --- 
-### When to use `chr_analysis.py` vs `customer_evaluation.py`
+### When to use `chr_analysis.py` vs `cache_evaluation.py`
 
 **Use `chr_analysis.py` when:**
 - You want to quickly understand cache hit ratio characteristics
@@ -92,7 +92,7 @@ Cache Hit Ratios at common thresholds:
 - You want to avoid the overhead of running an LLM judge
 - You're doing exploratory analysis on embedding model performance
 
-**Use `customer_evaluation.py` when:**
+**Use `cache_evaluation.py` when:**
 - You need precision, recall, and F-scores
 - You have labeled data or need LLM-judged similarity labels
 - You want the full evaluation pipeline with quality metrics

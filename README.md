@@ -8,7 +8,7 @@ Why an LLM? We use an **LLM-as-a-Judge** to produce proxy ground‑truth labels 
 
 Run evaluations for semantic caching with neural embeddings and optional LLM-as-a-Judge:
 
-- **`customer_evaluation.py`**: Full pipeline with LLM judge → precision, recall, F1, and cache hit ratio metrics
+- **`cache_evaluation.py`**: Full pipeline with LLM judge → precision, recall, F1, and cache hit ratio metrics
 - **`chr_analysis.py`**: Fast cache hit ratio analysis without LLM judge → threshold sweep and CHR plots
 
 Both scripts support **local or S3** inputs/outputs and optional **GPU acceleration**.
@@ -18,8 +18,8 @@ Under the hood, the pipeline (1) finds nearest matches for each user query using
 ## ✨ Features
 
 * **Two evaluation modes**
-  Choose full LLM-judged metrics (`customer_evaluation.py`) or fast cache-hit-ratio-only analysis (`chr_analysis.py`).
-* **Two‑stage scoring** *(customer_evaluation.py only)*
+  Choose full LLM-judged metrics (`cache_evaluation.py`) or fast cache-hit-ratio-only analysis (`chr_analysis.py`).
+* **Two‑stage scoring** *(cache_evaluation.py only)*
   Neural embedding matching followed by **LLM‑as‑a‑Judge** for higher‑quality similarity signals.
 * **Metrics & plots out of the box**
   Saves CSVs and generates threshold‑sweep visualizations to help tune decision thresholds.
@@ -87,7 +87,7 @@ id,text
 ### 3) Run
 
 ```bash
-uv run customer_evaluation.py \
+uv run cache_evaluation.py \
   --query_log_path ./data/queries.csv \
   --cache_path ./data/cache.csv \
   --sentence_column text \
@@ -100,7 +100,7 @@ uv run customer_evaluation.py \
 **S3 example**
 
 ```bash
-uv run customer_evaluation.py \
+uv run cache_evaluation.py \
   --query_log_path s3://my-bucket/eval/queries.csv \
   --cache_path s3://my-bucket/eval/cache.csv \
   --sentence_column text \
@@ -245,7 +245,7 @@ We welcome improvements — add new metrics, plots, or backends and send a PR. A
 
 ```bash
 # Full evaluation pipeline with LLM-as-a-Judge
-uv run customer_evaluation.py -h
+uv run cache_evaluation.py -h
 
 # Cache hit ratio analysis only
 uv run chr_analysis.py -h
