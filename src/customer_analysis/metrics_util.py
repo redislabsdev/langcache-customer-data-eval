@@ -64,7 +64,7 @@ def sweep_thresholds_on_results(results_df: pd.DataFrame) -> pd.DataFrame:
     """Perform threshold sweep and return results."""
     print("\nPerforming threshold sweep")
     min_score = results_df["similarity_score"].min()
-    steps = min(200, len(results_df))
+    steps = max(min(200, len(results_df)), 1) # At least 1 step, cannot be 0, and max length of 200
     thresholds = np.linspace(min_score, 1.0, steps)
     results = []
 
