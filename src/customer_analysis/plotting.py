@@ -37,7 +37,8 @@ def plot_cache_hit_ratio(results_df: pd.DataFrame, output_dir: str = None, filen
 
     Args:
         results_df: DataFrame with threshold and cache_hit_ratio columns
-        plot_handler: FileHandler to save the plot
+        output_dir: Directory to save the plot
+        filename: Name of the file to save the plot
     """
     plt.figure(figsize=(10, 6))
     plt.plot(results_df["threshold"], results_df["cache_hit_ratio"], linewidth=2)
