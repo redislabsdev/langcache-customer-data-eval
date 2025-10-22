@@ -1,13 +1,16 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+
 from src.customer_analysis.file_handler import FileHandler
 
 
-def generate_plots(results_df: pd.DataFrame, output_dir:str = None, precision_filename:str = None, metrics_filename:str = None):
+def generate_plots(
+    results_df: pd.DataFrame, output_dir: str = None, precision_filename: str = None, metrics_filename: str = None
+):
     # Plot 1: Precision vs Cache Hit Ratio
     results_df.plot(
         x="cache_hit_ratio",
-        y="precision",  
+        y="precision",
         kind="line",
         marker="o",
         markersize=1,
@@ -27,7 +30,8 @@ def generate_plots(results_df: pd.DataFrame, output_dir:str = None, precision_fi
     plt.legend()
     FileHandler.save_matplotlib_plot(output_dir, metrics_filename)
 
-def plot_cache_hit_ratio(results_df: pd.DataFrame, output_dir:str = None, filename:str = None):
+
+def plot_cache_hit_ratio(results_df: pd.DataFrame, output_dir: str = None, filename: str = None):
     """
     Plot cache hit ratio vs threshold.
 

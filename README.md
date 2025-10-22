@@ -100,6 +100,7 @@ id,text
 ```
 
 ### 4) Run
+> In all cases the script can be run with and without an explicit cache set. If you pass only `--query_log_path` and omit `--cache_path` as an argument, the script randomly samples `n_samples` to use as queries and uses the rest as cache.
 
 **CHR-only mode (default - no LLM required):**
 

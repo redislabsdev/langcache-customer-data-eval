@@ -12,7 +12,7 @@ def evaluate_threshold_on_results(results_df: pd.DataFrame, threshold: float) ->
     total_samples = len(results_df)
     cache_hit_ratio = cache_hits / total_samples if total_samples > 0 else 0.0
 
-    if 'actual_label' not in results_df.columns or results_df["actual_label"].isnull().all():
+    if "actual_label" not in results_df.columns or results_df["actual_label"].isnull().all():
         return {
             "threshold": threshold,
             "precision": np.nan,
@@ -36,7 +36,6 @@ def evaluate_threshold_on_results(results_df: pd.DataFrame, threshold: float) ->
         fp = ((pred_labels == 1) & (actual_labels == 0)).sum()
         fn = ((pred_labels == 0) & (actual_labels == 1)).sum()
         tn = ((pred_labels == 0) & (actual_labels == 0)).sum()
-
 
         # Calculate metrics
         metrics = calculate_metrics(tp, fp, fn)

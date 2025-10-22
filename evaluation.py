@@ -20,11 +20,11 @@ from src.customer_analysis import (
     FileHandler,
     generate_plots,
     load_data,
+    plot_cache_hit_ratio,
     postprocess_results_for_metrics,
     run_matching,
     run_matching_redis,
     sweep_thresholds_on_results,
-    plot_cache_hit_ratio,
 )
 
 RANDOM_SEED = 42
@@ -33,7 +33,6 @@ RANDOM_SEED = 42
 random.seed(RANDOM_SEED)
 np.random.seed(RANDOM_SEED)
 torch.manual_seed(RANDOM_SEED)
-
 
 
 def run_llm_as_a_judge(query_pairs, args):
@@ -72,7 +71,9 @@ def run_chr_analysis(queries: pd.DataFrame, args):
 
     # Sweep cache hit ratios
     similarity_scores = queries["best_scores"].values
-    results_df = sweep_thresholds_on_results(pd.DataFrame({"similarity_score": similarity_scores}), {"model_type": "neural"})
+    results_df = sweep_thresholds_on_results(
+        pd.DataFrame({"similarity_score": similarity_scores})
+    )
 
     # Save sweep results
     FileHandler.write_csv(results_df, args.output_dir, "chr_sweep.csv")
@@ -122,9 +123,13 @@ def run_full_evaluation(queries: pd.DataFrame, args):
     print("Stage three: Metrics calculation...")
     final_df = postprocess_results_for_metrics(queries, llm_df, args)
 
-    FileHandler.write_csv(final_df[[args.sentence_column, "matches", "similarity_score", "actual_label"]], args.output_dir, "llm_as_a_judge_results.csv")
+    FileHandler.write_csv(
+        final_df[[args.sentence_column, "matches", "similarity_score", "actual_label"]],
+        args.output_dir,
+        "llm_as_a_judge_results.csv",
+    )
 
-    results_df = sweep_thresholds_on_results(final_df, {"model_type": "neural"})
+    results_df = sweep_thresholds_on_results(final_df)
 
     FileHandler.write_csv(results_df, args.output_dir, "threshold_sweep_results.csv")
 
@@ -132,7 +137,12 @@ def run_full_evaluation(queries: pd.DataFrame, args):
     # Stage four: Generating plots
     # ------------------------------
     print("Stage four: Generating plots...")
-    generate_plots(results_df, output_dir=args.output_dir, precision_filename="precision_vs_cache_hit_ratio.png", metrics_filename="metrics_over_threshold.png")
+    generate_plots(
+        results_df,
+        output_dir=args.output_dir,
+        precision_filename="precision_vs_cache_hit_ratio.png",
+        metrics_filename="metrics_over_threshold.png",
+    )
 
 
 def main(args):
@@ -218,4 +228,3 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     main(args)
-

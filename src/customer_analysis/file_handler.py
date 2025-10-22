@@ -20,7 +20,7 @@ class FileHandler:
     """Abstraction for handling both local and S3 file operations."""
 
     @staticmethod
-    def write_csv(df: pd.DataFrame, output_dir:str = None, filename:str = None, index: bool = False):
+    def write_csv(df: pd.DataFrame, output_dir: str = None, filename: str = None, index: bool = False):
         """Write dataframe to CSV file."""
         assert output_dir is not None and filename is not None, "output_dir and filename must be provided"
         path = make_output_path(output_dir, filename)
@@ -31,13 +31,13 @@ class FileHandler:
         print(f"{'Uploaded' if output_dir.startswith('s3://') else 'Saved'}:", path)
 
     @staticmethod
-    def read_csv(file_path:str = None) -> pd.DataFrame:
+    def read_csv(file_path: str = None) -> pd.DataFrame:
         """Read CSV file to dataframe."""
         assert file_path is not None, "file_path must be provided"
         return pd.read_csv(file_path)
 
     @staticmethod
-    def save_matplotlib_plot(output_dir:str = None, filename:str = None, dpi: int = 150):
+    def save_matplotlib_plot(output_dir: str = None, filename: str = None, dpi: int = 150):
         """Save current matplotlib plot."""
         path = make_output_path(output_dir, filename)
         if path.startswith("s3://"):
