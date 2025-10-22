@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 
-def evaluate_threshold_on_results(results_df: pd.DataFrame, threshold: float, config: Dict) -> Dict:
+def evaluate_threshold_on_results(results_df: pd.DataFrame, threshold: float) -> Dict:
     """Evaluate metrics for a given threshold on pre-computed results."""
 
     # Calculate cache hit ratio
@@ -61,19 +61,19 @@ def evaluate_threshold_on_results(results_df: pd.DataFrame, threshold: float, co
         }
 
 
-def sweep_thresholds_on_results(results_df: pd.DataFrame, config: Dict) -> List[Dict]:
+def sweep_thresholds_on_results(results_df: pd.DataFrame) -> pd.DataFrame:
     """Perform threshold sweep and return results."""
     print("\nPerforming threshold sweep")
     min_score = results_df["similarity_score"].min()
-    steps = 200
+    steps = min(200, len(results_df))
     thresholds = np.linspace(min_score, 1.0, steps)
     results = []
 
     for i, threshold in enumerate(thresholds):
-        result = evaluate_threshold_on_results(results_df, float(threshold), config)
+        result = evaluate_threshold_on_results(results_df, float(threshold))
         results.append(result)
 
-    return results
+    return pd.DataFrame(results)
 
 
 def calculate_f_beta_score(a, b, beta: float) -> float:

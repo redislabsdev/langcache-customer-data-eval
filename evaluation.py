@@ -24,6 +24,7 @@ from src.customer_analysis import (
     run_matching,
     run_matching_redis,
     sweep_thresholds_on_results,
+    plot_cache_hit_ratio,
 )
 
 RANDOM_SEED = 42
@@ -33,34 +34,6 @@ random.seed(RANDOM_SEED)
 np.random.seed(RANDOM_SEED)
 torch.manual_seed(RANDOM_SEED)
 
-
-def make_output_path(output_dir: str, filename: str) -> str:
-    """Construct output path for both local and S3 paths."""
-    if output_dir.startswith("s3://"):
-        # For S3, always use forward slash
-        return f"{output_dir.rstrip('/')}/{filename}"
-    else:
-        # For local, use os.path.join
-        return os.path.join(output_dir, filename)
-
-def plot_cache_hit_ratio(results_df: pd.DataFrame, output_path: str):
-    """
-    Plot cache hit ratio vs threshold.
-
-    Args:
-        results_df: DataFrame with threshold and cache_hit_ratio columns
-        output_path: Path to save the plot
-    """
-    plt.figure(figsize=(10, 6))
-    plt.plot(results_df["threshold"], results_df["cache_hit_ratio"], linewidth=2)
-    plt.xlabel("Threshold", fontsize=12)
-    plt.ylabel("Cache Hit Ratio", fontsize=12)
-    plt.title("Cache Hit Ratio vs Threshold", fontsize=14)
-    plt.grid(True, alpha=0.3)
-    plt.tight_layout()
-
-    handler = FileHandler(output_path)
-    handler.save_matplotlib_plot()
 
 
 def run_llm_as_a_judge(query_pairs, args):
@@ -95,23 +68,18 @@ def run_chr_analysis(queries: pd.DataFrame, args):
     print("=" * 60)
 
     # Save matches
-    matches_path = make_output_path(args.output_dir, "chr_matches.csv")
-    matches_handler = FileHandler(matches_path)
-    matches_handler.write_csv(queries[[args.sentence_column, "matches", "best_scores"]])
+    FileHandler.write_csv(queries[[args.sentence_column, "matches", "best_scores"]], args.output_dir, "chr_matches.csv")
 
     # Sweep cache hit ratios
     similarity_scores = queries["best_scores"].values
     results_df = sweep_thresholds_on_results(pd.DataFrame({"similarity_score": similarity_scores}), {"model_type": "neural"})
 
     # Save sweep results
-    sweep_path = make_output_path(args.output_dir, "chr_sweep.csv")
-    sweep_handler = FileHandler(sweep_path)
-    sweep_handler.write_csv(results_df)
+    FileHandler.write_csv(results_df, args.output_dir, "chr_sweep.csv")
 
     # Generate plot
     print("Generating plot...")
-    plot_path = make_output_path(args.output_dir, "chr_vs_threshold.png")
-    plot_cache_hit_ratio(results_df, plot_path)
+    plot_cache_hit_ratio(results_df, args.output_dir, "chr_vs_threshold.png")
 
     # Print summary statistics
     print("\n" + "=" * 60)
@@ -138,8 +106,7 @@ def run_full_evaluation(queries: pd.DataFrame, args):
         )
 
     # Save matches
-    matches_handler = FileHandler(make_output_path(args.output_dir, "matches.csv"))
-    matches_handler.write_csv(queries[[args.sentence_column, "matches", "best_scores"]])
+    FileHandler.write_csv(queries[[args.sentence_column, "matches", "best_scores"]], args.output_dir, "matches.csv")
 
     # ------------------------------
     # Stage two: LLM-as-a-Judge
@@ -155,22 +122,17 @@ def run_full_evaluation(queries: pd.DataFrame, args):
     print("Stage three: Metrics calculation...")
     final_df = postprocess_results_for_metrics(queries, llm_df, args)
 
-    judge_results_handler = FileHandler(make_output_path(args.output_dir, "llm_as_a_judge_results.csv"))
-    judge_results_handler.write_csv(final_df[[args.sentence_column, "matches", "similarity_score", "actual_label"]])
+    FileHandler.write_csv(final_df[[args.sentence_column, "matches", "similarity_score", "actual_label"]], args.output_dir, "llm_as_a_judge_results.csv")
 
-    results = sweep_thresholds_on_results(final_df, {"model_type": "neural"})
-    results_df = pd.DataFrame(results)
+    results_df = sweep_thresholds_on_results(final_df, {"model_type": "neural"})
 
-    threshold_results_handler = FileHandler(make_output_path(args.output_dir, "threshold_sweep_results.csv"))
-    threshold_results_handler.write_csv(results_df)
+    FileHandler.write_csv(results_df, args.output_dir, "threshold_sweep_results.csv")
 
     # ------------------------------
     # Stage four: Generating plots
     # ------------------------------
     print("Stage four: Generating plots...")
-    precision_plot_path = make_output_path(args.output_dir, "precision_vs_cache_hit_ratio.png")
-    metrics_plot_path = make_output_path(args.output_dir, "metrics_over_threshold.png")
-    generate_plots(results_df, precision_plot_path, metrics_plot_path)
+    generate_plots(results_df, output_dir=args.output_dir, precision_filename="precision_vs_cache_hit_ratio.png", metrics_filename="metrics_over_threshold.png")
 
 
 def main(args):
