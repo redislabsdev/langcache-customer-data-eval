@@ -35,7 +35,7 @@ def run_matching(queries, cache, args):
         queries=queries[args.sentence_column].to_list(),
         cache=cache[args.sentence_column].to_list(),
         batch_size=512,
-        early_stop=args.n_samples,
+        early_stop=min(args.n_samples, len(queries)),
     )
 
     queries["best_scores"] = best_scores
@@ -82,7 +82,7 @@ def main(args):
             return os.path.join(args.output_dir, filename)
 
     # Input paths are used directly - they can already be full S3 or local paths
-    queries, cache = load_data(args.query_log_path, args.cache_path, args.n_samples)
+    queries, cache = load_data(query_log_path=args.query_log_path, cache_path=args.cache_path, n_samples=args.n_samples)
 
     # ------------------------------
     # Stage one: Matching

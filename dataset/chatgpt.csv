@@ -1,0 +1,717 @@
+sentence1,sentence2,label
+"price of iphone 16 in the US (latest)","current US price for iPhone 16 today",0
+"price of iphone 16 in the US","iphone 16 cost in the United States",1
+"python sort list ascending","how to sort a list in python ascending",1
+"python sort list ascending","python reverse sort list",0
+"Capital of Canada","What is the capital city of Canada?",1
+"Capital of Canada","Population of Canada",0
+"download TensorFlow 2.12 wheels","download TensorFlow 2.13 wheels",0
+"GDP of Japan in 2020","Japan GDP for year 2020",1
+"GDP of Japan in 2020","Japan GDP latest",0
+"translate to Spanish: 'Good morning'","traducir a español: 'Good morning'",1
+"translate to Spanish: 'Good morning'","translate to French: 'Good morning'",0
+"site:arxiv.org Transformers review","Transformers review site:arxiv.org",1
+"site:arxiv.org Transformers review","Transformers review site:openreview.net",0
+"weather in Berlin today","today's weather in Berlin",1
+"weather in Berlin today","weather in Berlin next week",0
+"convert 10 USD to EUR","10 dollars in euros",1
+"convert 10 USD to EUR","convert 10 EUR to USD",0
+"top 5 coffee shops in Seattle","best five coffee shops in Seattle",1
+"top 5 coffee shops in Seattle","top 10 coffee shops in Seattle",0
+"Create JSON with keys title,author","Return JSON fields: title and author",1
+"Create JSON with keys title,author","Return YAML fields: title and author",0
+"apple stock price as of 2024-12-31","AAPL price on 2024-12-31",1
+"apple stock price as of 2024-12-31","AAPL price today",0
+"book a hotel in Paris for two adults","reserve a hotel room in Paris for 2 adults",1
+"book a hotel in Paris for two adults","find tourist attractions in Paris",0
+"nearest gas station","closest petrol station",1
+"nearest gas station","cheapest gas station",0
+"SQL: count rows in table orders","SQL: number of rows in orders table",1
+"SQL: count rows in table orders","SQL: list all rows in orders",0
+"NBA finals winners list","list of NBA champions",1
+"NBA finals winners list","list of NFL champions",0
+"open source license comparison MIT vs Apache","compare MIT with Apache license",1
+"open source license comparison MIT vs Apache","MIT license full text",0
+"translate this to German (informal)","translate this to German using du-form",1
+"translate this to German (informal)","translate this to German (formal)",0
+"elevation of Mount Everest","height of Everest",1
+"elevation of Mount Everest","height of K2",0
+"site:wikipedia.org pandas merge examples","pandas merge examples site:wikipedia.org",1
+"site:wikipedia.org pandas merge examples","pandas merge examples site:docs.python.org",0
+"download Ubuntu 22.04 ISO","Ubuntu 22.04 ISO download",1
+"download Ubuntu 22.04 ISO","download Ubuntu 24.04 ISO",0
+"restaurants open now near me","restaurants currently open nearby",1
+"restaurants open now near me","best restaurants near me",0
+"define photosynthesis in one sentence","give a one-sentence definition of photosynthesis",1
+"define photosynthesis in one sentence","explain photosynthesis in detail",0
+"convert 5km to miles","5 kilometers in miles",1
+"convert 5km to miles","5 miles in kilometers",0
+"top 3 results for 'machine learning basics'","return three results for machine learning basics",1
+"top 3 results for 'machine learning basics'","return ten results for machine learning basics",0
+"show me New York time now","current time in New York",1
+"show me New York time now","current time in Los Angeles",0
+"What is Docker? (beginner)","Explain Docker for a beginner",1
+"What is Docker? (beginner)","Explain Docker for an expert",0
+"sum of 2 and 3","compute 2+3",1
+"sum of 2 and 3","product of 2 and 3",0
+"Flights from London to Tokyo in June","June flights London→Tokyo",1
+"Flights from London to Tokyo in June","Flights from London to Tokyo in December",0
+"Sort array ascending in JavaScript","JS: sort an array ascending",1
+"Sort array ascending in JavaScript","JS: sort an array descending",0
+"company address of OpenAI","OpenAI company address",1
+"company address of OpenAI","OpenAI CEO name",0
+"Is quinoa gluten-free?","Does quinoa contain gluten?",1
+"Is quinoa gluten-free?","Calories in quinoa",0
+"Define 'entropy' (short)","Short definition of entropy",1
+"Define 'entropy' (short)","Detailed explanation of entropy with math",0
+"news about Tesla this week","latest Tesla news",1
+"news about Tesla this week","Tesla news in 2018",0
+"site:github.com 'vector search'","'vector search' on github.com",1
+"site:github.com 'vector search'","'vector search' on stackoverflow.com",0
+"download Node.js LTS","get Node LTS download",1
+"download Node.js LTS","download Node.js Current",0
+"restaurants in Paris under €30","Paris restaurants with price < 30 EUR",1
+"restaurants in Paris under €30","Paris restaurants under $30",0
+"what is HTTP status 404","explain HTTP 404",1
+"what is HTTP status 404","explain HTTP 500",0
+"nearest ATM","closest cash machine",1
+"nearest ATM","nearest bank branch",0
+"translate to Japanese: 'thank you'","'thank you' into Japanese",1
+"translate to Japanese: 'thank you'","'thank you' into Chinese",0
+"images of the Eiffel Tower","Eiffel Tower photos",1
+"images of the Eiffel Tower","Eiffel Tower ticket prices",0
+"population of Berlin 2020","Berlin population in 2020",1
+"population of Berlin 2020","Berlin population now",0
+"Open in CSV: top 10 rows of table sales","Return CSV with top 10 rows from sales",1
+"Open in CSV: top 10 rows of table sales","Return JSON with top 10 rows from sales",0
+"find PDF user manual for ThinkPad X1","download ThinkPad X1 user manual PDF",1
+"find PDF user manual for ThinkPad X1","find driver updates for ThinkPad X1",0
+"weather in Sydney tomorrow","Sydney forecast for tomorrow",1
+"weather in Sydney tomorrow","Sydney weather today",0
+"site:docs.python.org asyncio tutorial","asyncio tutorial site:docs.python.org",1
+"site:docs.python.org asyncio tutorial","asyncio tutorial site:realpython.com",0
+"top 5 sci-fi books of 2023","best five science fiction books 2023",1
+"top 5 sci-fi books of 2023","best five science fiction books 2024",0
+"open-source vector DBs list","list of open source vector databases",1
+"open-source vector DBs list","compare managed vector DB services",0
+"show me JPEG to PNG converter","JPEG→PNG converter",1
+"show me JPEG to PNG converter","JPEG→WebP converter",0
+"currency exchange rate USD to JPY now","current USD/JPY rate",1
+"currency exchange rate USD to JPY now","USD/JPY rate yesterday",0
+"create a table with two columns name,age","make a 2-column table: name and age",1
+"create a table with two columns name,age","make a table with columns name,age,city",0
+"SQL: list orders where status='shipped'","SQL: select orders with status shipped",1
+"SQL: list orders where status='shipped'","SQL: count orders where status='shipped'",0
+"define 'variance' in statistics","statistics: definition of variance",1
+"define 'variance' in statistics","compute sample variance of [1,2,3]",0
+"translate to English: '¿Dónde está la biblioteca?'","Translate '¿Dónde está la biblioteca?' to English",1
+"translate to English: '¿Dónde está la biblioteca?'","Translate '¿Dónde está la biblioteca?' to French",0
+"movie times for 'Oppenheimer' in Boston","Boston showtimes for Oppenheimer",1
+"movie times for 'Oppenheimer' in Boston","movie times for 'Barbie' in Boston",0
+"NYC subway map","New York City subway map",1
+"NYC subway map","NYC bus map",0
+"latest stable Kubernetes version","current stable Kubernetes release",1
+"latest stable Kubernetes version","Kubernetes version in 2021",0
+"Chocolate chip cookie recipe (metric)","cookie recipe in metric units",1
+"Chocolate chip cookie recipe (metric)","cookie recipe in US cups",0
+"find me 'site:gov.uk passport renewal'","passport renewal site:gov.uk",1
+"find me 'site:gov.uk passport renewal'","passport renewal site:usa.gov",0
+"Linux check disk space command","how to check disk usage on Linux",1
+"Linux check disk space command","how to check memory usage on Linux",0
+"Who is the president of France?","Name the French president",1
+"Who is the president of France?","Name the prime minister of France",0
+"Top universities in Germany 2024 ranking","best German universities ranking 2024",1
+"Top universities in Germany 2024 ranking","best German universities ranking 2022",0
+"Restaurants in Tokyo that are open late","late-night restaurants in Tokyo",1
+"Restaurants in Tokyo that are open late","breakfast restaurants in Tokyo",0
+"JSON: return fields id and url only","Return only id and url as JSON",1
+"JSON: return fields id and url only","Return id, url, and title as JSON",0
+"Compute median of list [1,3,5,7]","Find the median for [1,3,5,7]",1
+"Compute median of list [1,3,5,7]","Find the mean for [1,3,5,7]",0
+"Give me synonyms of 'happy'","List synonyms for happy",1
+"Give me synonyms of 'happy'","Give antonyms of happy",0
+"site:bbc.com climate change article","climate change article site:bbc.com",1
+"site:bbc.com climate change article","climate change article site:cnn.com",0
+"'machine learning' exact phrase search","search exact phrase 'machine learning'",1
+"'machine learning' exact phrase search","search machine learning without quotes",0
+"translate this to Portuguese (pt-BR)","translate to Brazilian Portuguese",1
+"translate this to Portuguese (pt-BR)","translate to European Portuguese (pt-PT)",0
+"time in Tokyo when it's noon in London","convert time London noon to Tokyo",1
+"time in Tokyo when it's noon in London","time in Tokyo now",0
+"find CSV download for unemployment data 2023","get 2023 unemployment data as CSV",1
+"find CSV download for unemployment data 2023","get 2023 unemployment data as JSON",0
+"Explain PageRank in 3 bullets","3 bullet explanation of PageRank",1
+"Explain PageRank in 3 bullets","Explain PageRank with math derivation",0
+"nearest pharmacy open 24 hours","24/7 pharmacy near me",1
+"nearest pharmacy open 24 hours","pharmacy near me with COVID vaccines",0
+"post office hours today in Chicago","Chicago post office hours today",1
+"post office hours today in Chicago","Chicago post office hours tomorrow",0
+"find 'Deep Learning' book PDF (legal)","locate a legal PDF of 'Deep Learning'",1
+"find 'Deep Learning' book PDF (legal)","find torrents for 'Deep Learning' book",0
+"temperature in Celsius for New York now","current temperature in New York (°C)",1
+"temperature in Celsius for New York now","current temperature in New York (°F)",0
+"KNeighborsClassifier sklearn example","example for sklearn KNeighborsClassifier",1
+"KNeighborsClassifier sklearn example","example for sklearn RandomForestClassifier",0
+"Top 3 news about AI today","three AI headlines today",1
+"Top 3 news about AI today","AI headlines this month",0
+"Recipe for pesto (nut-free)","nut-free pesto recipe",1
+"Recipe for pesto (nut-free)","pesto recipe with pine nuts",0
+"exchange rate GBP to EUR at market close","GBP/EUR at yesterday's close",0
+"exchange rate GBP to EUR at market close","GBP to EUR market close rate",1
+"How to reset a Windows 11 password","steps to reset Windows 11 password",1
+"How to reset a Windows 11 password","How to reset a Mac password",0
+"top 10 universities worldwide QS 2025","QS World University Rankings 2025 top 10",1
+"top 10 universities worldwide QS 2025","QS World University Rankings 2023 top 10",0
+"news about OpenAI CEO today","OpenAI CEO news today",1
+"news about OpenAI CEO today","OpenAI CEO biography",0
+"convert Markdown to HTML","turn Markdown into HTML",1
+"convert Markdown to HTML","convert HTML to Markdown",0
+"clinical trial NCT number lookup","find study by NCT ID",1
+"clinical trial NCT number lookup","find study by EudraCT number",0
+"return top 5 results sorted by date","give five newest results",1
+"return top 5 results sorted by date","give five most relevant results",0
+"define 'precision' vs 'recall' briefly","briefly define precision and recall",1
+"define 'precision' vs 'recall' briefly","compute precision/recall for given data",0
+"restaurant reservations for tonight at 7pm","book a table tonight at 7 pm",1
+"restaurant reservations for tonight at 7pm","find restaurants open tonight",0
+"British English spelling for 'color'","Write 'colour' in British English",1
+"British English spelling for 'color'","Write 'color' in American English",0
+"download latest NVIDIA driver for Windows","get newest NVIDIA Windows driver",1
+"download latest NVIDIA driver for Windows","get newest AMD Windows driver",0
+"find 'site:europa.eu GDPR guidelines pdf'","GDPR guidelines pdf site:europa.eu",1
+"find 'site:europa.eu GDPR guidelines pdf'","GDPR guidelines html site:europa.eu",0
+"SQL: SELECT id,name FROM users LIMIT 10","SQL: return id and name for first 10 users",1
+"SQL: SELECT id,name FROM users LIMIT 10","SQL: SELECT id,name,email FROM users LIMIT 10",0
+"calculate mortgage payment for $500k at 5%","monthly payment on $500k mortgage at 5 percent",1
+"calculate mortgage payment for $500k at 5%","monthly payment on $600k mortgage at 5 percent",0
+"show me code to read a CSV in Python","Python code to read CSV",1
+"show me code to read a CSV in Python","R code to read CSV",0
+"who won the FIFA World Cup 2018","FIFA 2018 champion",1
+"who won the FIFA World Cup 2018","FIFA 2022 champion",0
+"top JavaScript frameworks 2024","best JS frameworks of 2024",1
+"top JavaScript frameworks 2024","best JS frameworks of 2021",0
+"nearest emergency room","closest ER",1
+"nearest emergency room","closest urgent care",0
+"translate to Chinese (Simplified): 'library'","translate 'library' into zh-CN",1
+"translate to Chinese (Simplified): 'library'","translate 'library' into zh-TW",0
+"Return plaintext only, no links: explain TLS","Explain TLS in plaintext with no links",1
+"Return plaintext only, no links: explain TLS","Explain TLS and include links",0
+"site:reddit.com best budget laptops","best budget laptops site:reddit.com",1
+"site:reddit.com best budget laptops","best budget laptops site:theverge.com",0
+"current EUR inflation rate (y/y)","year-over-year inflation in the Eurozone now",1
+"current EUR inflation rate (y/y)","Eurozone inflation rate in 2019",0
+"OpenAPI spec example (YAML)","example OpenAPI YAML",1
+"OpenAPI spec example (YAML)","example OpenAPI JSON",0
+"show top 3 restaurants with rating ≥4.5","list three restaurants rated at least 4.5",1
+"show top 3 restaurants with rating ≥4.5","list five restaurants rated at least 4.5",0
+"What is the derivative of sin(x)?","derivative of sine x",1
+"What is the derivative of sin(x)?","integral of sin(x)",0
+"Find contact email for Acme Corp","Acme Corporation contact email",1
+"Find contact email for Acme Corp","Acme Corporation phone number",0
+"Give two pros and two cons of remote work","list 2 pros and 2 cons of remote work",1
+"Give two pros and two cons of remote work","list three pros and three cons of remote work",0
+"Return CSV with columns name,price,currency","CSV output: name, price, currency",1
+"Return CSV with columns name,price,currency","JSON output: name, price, currency",0
+"convert 100°F to Celsius","100 Fahrenheit in Celsius",1
+"convert 100°F to Celsius","100 Celsius in Fahrenheit",0
+"best hiking trails near Denver","top hiking trails near Denver",1
+"best hiking trails near Denver","best camping sites near Denver",0
+"Explain 'hash map' to a 10-year-old","ELI5 explanation of hash maps",1
+"Explain 'hash map' to a 10-year-old","Formal academic definition of hash maps",0
+"site:imperial.ac.uk machine learning syllabus","machine learning syllabus site:imperial.ac.uk",1
+"site:imperial.ac.uk machine learning syllabus","machine learning syllabus site:ox.ac.uk",0
+"latest NVIDIA earnings report","most recent NVIDIA earnings",1
+"latest NVIDIA earnings report","NVIDIA earnings in 2020",0
+"nearest EV charging station","closest EV charger",1
+"nearest EV charging station","cheapest EV charging station",0
+"Who wrote 'Pride and Prejudice'?","Author of 'Pride and Prejudice'",1
+"Who wrote 'Pride and Prejudice'?","Main characters of 'Pride and Prejudice'",0
+"give me three citations about GPT-4","three references about GPT-4",1
+"give me three citations about GPT-4","ten references about GPT-4",0
+"weather in Sofia this weekend","Sofia weekend weather forecast",1
+"weather in Sofia this weekend","Sofia weather next month",0
+"find PDF 'AWS Well-Architected Framework'","download 'AWS Well-Architected Framework' PDF",1
+"find PDF 'AWS Well-Architected Framework'","download 'Azure Well-Architected Framework' PDF",0
+"Return only titles of top 5 results","Only return titles for five results",1
+"Return only titles of top 5 results","Return titles and URLs for five results",0
+"Is 'color' spelled 'colour' in the UK?","British spelling of 'color' is 'colour'?",1
+"Is 'color' spelled 'colour' in the UK?","American spelling of 'colour' is 'color'?",0
+"translate to Italian and keep punctuation","Italian translation preserving punctuation",1
+"translate to Italian and keep punctuation","Italian translation without punctuation",0
+"Stack Overflow question on Python f-strings","Python f-strings question on Stack Overflow",1
+"Stack Overflow question on Python f-strings","Reddit discussion on Python f-strings",0
+"top 3 papers on retrieval-augmented generation","three best RAG papers",1
+"top 3 papers on retrieval-augmented generation","five best RAG papers",0
+"return headlines only, no summaries","give only the headlines",1
+"return headlines only, no summaries","give headlines with summaries",0
+"nearest public library","closest public library",1
+"nearest public library","public library opening hours",0
+"Explain RSA in two sentences","two-sentence explanation of RSA",1
+"Explain RSA in two sentences","detailed explanation of RSA with equations",0
+"site:who.int malaria factsheet pdf","malaria factsheet pdf site:who.int",1
+"python memory leak in requests","memory leak in python requests",1
+"error code 504 on upload","why do I get 504 when uploading",1
+"tag:postgres in:title index strategy","in:title index strategy tag:postgres",1
+"author:alice docker compose tips","docker compose tips by author:alice",1
+"best IDE for Rust beginners","good starter IDE for Rust",1
+"site:forum.example.com graphql timeout","graphql timeout site:forum.example.com",1
+"\"connection reset by peer\" on deploy","deploy fails with \"connection reset by peer\"",1
+"tag:kubernetes sort:recent ingress tls","ingress tls tag:kubernetes sort:recent",1
+"in:title dark mode css","css dark mode in:title",1
+"how to mute a thread","mute a discussion thread",1
+"compare SSD vs HDD longevity","SSD and HDD longevity comparison",1
+"after:2025-01-01 tag:release-notes","tag:release-notes after:2025-01-01",1
+"markdown table alignment help","how to align tables in markdown",1
+"android studio emulator slow on M1","emulator is slow on M1 in android studio",1
+"windows 11 clipboard history not working","clipboard history broken on windows 11",1
+"gpu passthrough on proxmox guide","proxmox gpu passthrough how-to",1
+"nx monorepo caching tips","tips for caching in nx monorepo",1
+"vim search and replace across files","find and replace across files in vim",1
+"latex figure not centered","center a figure in latex",1
+"ssh key permission denied troubleshooting","permission denied (publickey) fix",1
+"top 5 posts about log aggregation","show five best posts on log aggregation",1
+"is:solved selenium click intercepted","selenium element click intercepted is:solved",1
+"how to revoke jwt tokens","revoking JWT tokens best practices",1
+"rebase vs merge explanation","explain rebase versus merge",1
+"npm audit false positives","false positives in npm audit",1
+"how to backup mariaDB daily","daily backup for MariaDB",1
+"ffmpeg trim without re-encoding","trim video without reencoding ffmpeg",1
+"c# nullable reference types overview","overview of nullable reference types in c#",1
+"jira automation send slack message","send slack from jira automation",1
+"git ignore nested node_modules","ignore nested node_modules in git",1
+"python memory leak in requests","python memory leak in aiohttp",0
+"error code 504 on upload","error code 502 on upload",0
+"tag:postgres in:title index strategy","tag:mysql in:title index strategy",0
+"author:alice docker compose tips","author:bob docker compose tips",0
+"best IDE for Rust beginners","best IDE for Go beginners",0
+"site:forum.example.com graphql timeout","graphql timeout site:docs.example.com",0
+"\"connection reset by peer\" on deploy","\"broken pipe\" on deploy",0
+"tag:kubernetes sort:recent ingress tls","tag:kubernetes sort:top ingress tls",0
+"in:title dark mode css","in:body dark mode css",0
+"how to mute a thread","unmute a discussion thread",0
+"compare SSD vs HDD longevity","compare SSD vs NVMe longevity",0
+"after:2025-01-01 tag:release-notes","before:2025-01-01 tag:release-notes",0
+"markdown table alignment help","markdown table alignment help (Spanish)",0
+"android studio emulator slow on M1","android studio emulator slow on Windows",0
+"windows 11 clipboard history not working","windows 10 clipboard history not working",0
+"gpu passthrough on proxmox guide","gpu passthrough on vmware guide",0
+"nx monorepo caching tips","bazel monorepo caching tips",0
+"vim search and replace across files","emacs search and replace across files",0
+"latex figure not centered","word figure not centered",0
+"ssh key permission denied troubleshooting","ssh key permission denied on GitLab CI",0
+"top 5 posts about log aggregation","show top 20 posts on log aggregation",0
+"is:solved selenium click intercepted","selenium click intercepted is:unsolved",0
+"how to revoke jwt tokens","how to refresh jwt tokens",0
+"rebase vs merge explanation","squash vs merge explanation",0
+"npm audit false positives","yarn audit false positives",0
+"how to backup mariaDB daily","how to backup PostgreSQL daily",0
+"ffmpeg trim without re-encoding","ffmpeg resize without re-encoding",0
+"c# nullable reference types overview","f# nullable reference types overview",0
+"jira automation send slack message","jira automation send email",0
+"git ignore nested node_modules","git ignore .venv folders",0
+"find posts about home lab cooling","home lab cooling tips",1
+"setup wireguard on ubuntu 24.04","wireguard setup on ubuntu 24.04",1
+"tag:career how to negotiate salary","salary negotiation tag:career",1
+"delete local git branch safely","safely delete a local git branch",1
+"docker prune unused images command","remove unused docker images command",1
+"typescript narrow union by in operator","narrow unions with 'in' operator typescript",1
+"postgres vacuum settings explained","explain autovacuum settings in postgres",1
+"kafka consumer lag monitoring","monitoring kafka consumer lag",1
+"apple silicon brew path issues","brew path problems on apple silicon",1
+"nuxt vs next for content sites","next vs nuxt for content websites",1
+"find posts about home lab cooling","find posts about home **heating**",0
+"setup wireguard on ubuntu 24.04","setup wireguard on debian 12",0
+"tag:career how to negotiate salary","tag:career how to negotiate offers **in Germany**",0
+"delete local git branch safely","delete **remote** git branch safely",0
+"docker prune unused images command","docker **system** prune all command",0
+"typescript narrow union by in operator","typescript narrow union by **typeof**",0
+"postgres vacuum settings explained","postgres **wal** settings explained",0
+"kafka consumer lag monitoring","kafka **partition** rebalancing",0
+"apple silicon brew path issues","intel mac brew path issues",0
+"nuxt vs next for content sites","nuxt vs next for **ecommerce** sites",0
+"quote: \"strict mode\" causes duplicate renders react 18","react 18 duplicate renders with \"strict mode\"",1
+"site:forum.example.com tag:security password hashing","password hashing tag:security site:forum.example.com",1
+"after:2025-06-01 sort:recent tag:release","tag:release sort:recent after:2025-06-01",1
+"in:title migrate from circleci to github actions","migrate from circleci to github actions in:title",1
+"terraform state file locking s3","s3 terraform state locking",1
+"monitor linux disk io with iostat","iostat monitor disk io on linux",1
+"convert wav to mp3 with ffmpeg","ffmpeg convert wav to mp3",1
+"set up cron weekly on ubuntu","ubuntu cron weekly setup",1
+"python list comprehension if else example","if else in python list comprehension example",1
+"regex for email validation examples","examples of email validation regex",1
+"quote: \"strict mode\" causes duplicate renders react 18","react 18 strict mode performance",0
+"site:forum.example.com tag:security password hashing","site:forum.example.com tag:security **oauth**",0
+"after:2025-06-01 sort:recent tag:release","after:2024-06-01 sort:recent tag:release",0
+"in:title migrate from circleci to github actions","in:title migrate from **travis** to github actions",0
+"terraform state file locking s3","terraform state file locking **gcs**",0
+"monitor linux disk io with iostat","monitor linux disk io with **sar**",0
+"convert wav to mp3 with ffmpeg","convert wav to **flac** with ffmpeg",0
+"set up cron weekly on ubuntu","set up cron **daily** on ubuntu",0
+"python list comprehension if else example","python list comprehension **for if** example",0
+"regex for email validation examples","regex for **URL** validation examples",0
+"how to export from notion to markdown","export notion pages to markdown",1
+"install tailscale on synology nas","synology install tailscale",1
+"capture network packets with tcpdump basics","tcpdump basics to capture packets",1
+"explain CAP theorem like I'm five","ELI5 CAP theorem explanation",1
+"migrate from yarn to pnpm steps","steps to migrate from yarn to pnpm",1
+"zsh autocomplete not working fix","fix zsh autocomplete not working",1
+"sqlite foreign key constraints on by default","enable sqlite foreign keys by default",1
+"find python jobs board threads","threads about python job boards",1
+"eslint config for monorepo example","example eslint config for monorepo",1
+"k8s liveness vs readiness probe difference","difference between liveness and readiness probes k8s",1
+"how to export from notion to markdown","how to export from **confluence** to markdown",0
+"install tailscale on synology nas","install tailscale on **qnap** nas",0
+"capture network packets with tcpdump basics","capture network packets with **wireshark** basics",0
+"explain CAP theorem like I'm five","explain **PACELC** theorem like I'm five",0
+"migrate from yarn to pnpm steps","migrate from yarn to **npm** steps",0
+"zsh autocomplete not working fix","bash autocomplete not working fix",0
+"sqlite foreign key constraints on by default","postgres foreign key constraints on by default",0
+"find python jobs board threads","find **java** jobs board threads",0
+"eslint config for monorepo example","tsconfig for monorepo example",0
+"k8s liveness vs readiness probe difference","k8s **startup** vs readiness probe difference",0
+"show me posts about remote work burnout","remote work burnout discussions",1
+"macOS firewall block specific app","block specific app with macOS firewall",1
+"how to rotate api keys safely","rotate API keys safely",1
+"pricing discussion for cloud storage","cloud storage pricing discussion",1
+"best practices for code reviews","good code review practices",1
+"where to learn wasm basics","resources to learn wasm basics",1
+"python dataclass default factory examples","examples of dataclass default_factory",1
+"what is blue/green deployment","blue green deployment explained",1
+"how to paginate REST API responses","paginate responses in REST API",1
+"start a homelab cheaply","cheap homelab getting started",1
+"show me posts about remote work burnout","show me posts about remote **hiring**",0
+"macOS firewall block specific app","windows firewall block specific app",0
+"how to rotate api keys safely","how to **store** api keys safely",0
+"pricing discussion for cloud storage","pricing discussion for **object** storage with egress costs",0
+"best practices for code reviews","best practices for **pair programming**",0
+"where to learn wasm basics","where to learn **webgpu** basics",0
+"python dataclass default factory examples","python dataclass **slots** examples",0
+"what is blue/green deployment","what is **canary** deployment",0
+"how to paginate REST API responses","how to **filter** REST API responses",0
+"start a homelab cheaply","start a homelab **for AI** cheaply",0
+"in:title \"rate limit\" github api","github api rate limit in:title",1
+"author:carol rust lifetimes tutorial","rust lifetimes tutorial by author:carol",1
+"tag:design-system button accessibility","button accessibility tag:design-system",1
+"search exact phrase \"null reference\"","\"null reference\" exact phrase search",1
+"how to escape quotes in json","escaping quotes in json",1
+"set up private npm registry","private npm registry setup",1
+"choose a linux filesystem for ssd","best linux filesystem for ssd",1
+"websocket reconnect backoff strategy","backoff strategy for websocket reconnect",1
+"compile nginx with brotli module","nginx compile with brotli",1
+"graphql vs rest caching strategies","caching strategies for graphql vs rest",1
+"in:title \"rate limit\" github api","in:title \"rate limit\" **twitter** api",0
+"author:carol rust lifetimes tutorial","author:carol rust **traits** tutorial",0
+"tag:design-system button accessibility","tag:design-system **input** accessibility",0
+"search exact phrase \"null reference\"","search exact phrase \"null pointer\"",0
+"how to escape quotes in json","how to escape quotes in **yaml**",0
+"set up private npm registry","set up **docker** private registry",0
+"choose a linux filesystem for ssd","choose a linux filesystem for **nas**",0
+"websocket reconnect backoff strategy","http retry backoff strategy",0
+"compile nginx with brotli module","compile **apache** with brotli module",0
+"graphql vs rest caching strategies","graphql vs **grpc** caching strategies",0
+"find posts with code blocks about regex","posts about regex with code blocks has:code",1
+"search guides for migrating to ipv6","guides for migrating to ipv6",1
+"tips for reducing docker image size","reduce docker image size tips",1
+"how to debug 100% cpu in nodejs","debug high cpu in nodejs",1
+"ios push notifications not delivered","apns not delivering push notifications",1
+"split monolith into microservices pitfalls","pitfalls splitting monolith into microservices",1
+"kotlin coroutines vs threads explanation","explain kotlin coroutines vs threads",1
+"cicd for python with github actions","github actions cicd for python",1
+"raspberry pi headless setup wifi","headless raspberry pi wifi setup",1
+"sqlite full text search tutorial","tutorial for sqlite fts",1
+"find posts with code blocks about regex","posts about regex with **images** has:image",0
+"search guides for migrating to ipv6","search guides for migrating to **ipv4**",0
+"tips for reducing docker image size","tips for reducing **vm** image size",0
+"how to debug 100% cpu in nodejs","how to debug 100% **memory** in nodejs",0
+"ios push notifications not delivered","**firebase** push notifications not delivered",0
+"split monolith into microservices pitfalls","split microservices into **monolith** pitfalls",0
+"kotlin coroutines vs threads explanation","kotlin **flows** vs threads explanation",0
+"cicd for python with github actions","cicd for python with **gitlab**",0
+"raspberry pi headless setup wifi","raspberry pi headless setup **ethernet only**",0
+"sqlite full text search tutorial","postgres full text search tutorial",0
+"sort:recent tag:announcements outage report","outage report tag:announcements sort:recent",1
+"compare password managers thread","thread comparing password managers",1
+"windows terminal transparent background","make windows terminal background transparent",1
+"helm chart testing best practices","best practices for testing helm charts",1
+"vue 3 composition api intro","introduction to vue 3 composition api",1
+"python virtualenv vs conda which to use","which to use: python virtualenv or conda",1
+"learn git submodules the hard way","git submodules guide",1
+"redis pub/sub vs streams use cases","use cases for redis pub/sub vs streams",1
+"serverless cold start mitigation","mitigating serverless cold starts",1
+"find threads on burnout prevention","threads on preventing burnout",1
+"sort:recent tag:announcements outage report","sort:top tag:announcements outage report",0
+"compare password managers thread","compare **vpn providers** thread",0
+"windows terminal transparent background","windows terminal **blur** background",0
+"helm chart testing best practices","helm chart **signing** best practices",0
+"vue 3 composition api intro","react hooks intro",0
+"python virtualenv vs conda which to use","python virtualenv **inside docker** which to use",0
+"learn git submodules the hard way","learn git **subtrees** the hard way",0
+"redis pub/sub vs streams use cases","kafka pub/sub vs streams use cases",0
+"serverless cold start mitigation","serverless cold start **measurement**",0
+"find threads on burnout prevention","find threads on **on-call** burnout",0
+"how to write ADRs effectively","effective architecture decision records",1
+"linux ulimit soft vs hard","difference between soft and hard ulimit",1
+"python logging to json examples","examples of logging to json in python",1
+"monitoring with prometheus histograms","using prometheus histograms",1
+"convert csv to parquet with python","python convert csv to parquet",1
+"git lfs migrate existing repository","migrate existing repo to git lfs",1
+"compile openjdk from source tips","tips to compile openjdk from source",1
+"explain oauth2 device flow","oauth2 device code flow explained",1
+"ansible vault best practices","best practices for ansible vault",1
+"compare pgdump and pg_dumpall","pgdump vs pg_dumpall comparison",1
+"how to write ADRs effectively","how to write **RFCs** effectively",0
+"linux ulimit soft vs hard","linux **nice** values explained",0
+"python logging to json examples","python logging to **syslog** examples",0
+"monitoring with prometheus histograms","monitoring with prometheus **summaries**",0
+"convert csv to parquet with python","convert csv to parquet with **java**",0
+"git lfs migrate existing repository","git lfs **clean** existing repository",0
+"compile openjdk from source tips","compile **openj9** from source tips",0
+"explain oauth2 device flow","explain oauth2 **implicit** flow",0
+"ansible vault best practices","ansible **collections** best practices",0
+"compare pgdump and pg_dumpall","compare **mysqldump** and pg_dumpall",0
+"how to search only titles for docker networking","search titles only for docker networking",1
+"find posts with more than 50 upvotes about sso","posts about sso votes:>50",1
+"threads about migrating from svn to git","migrating from svn to git threads",1
+"how to mark a post as duplicate","mark thread as duplicate guide",1
+"find unanswered questions about grpc","replies:0 about grpc",1
+"where to report bugs to moderators","report bugs to moderators",1
+"download attachments from a thread","how to download thread attachments",1
+"how to restore deleted comments","restore deleted comments guide",1
+"explain event sourcing with examples","event sourcing explained with examples",1
+"compare json schema and protobuf","json schema vs protobuf compared",1
+"how to search only titles for docker networking","how to search only **bodies** for docker networking",0
+"find posts with more than 50 upvotes about sso","posts about sso votes:>10",0
+"threads about migrating from svn to git","threads about migrating from **git** to **svn**",0
+"how to mark a post as duplicate","how to mark a post as **solved**",0
+"find unanswered questions about grpc","replies:>0 about grpc",0
+"where to report bugs to moderators","where to report **spam** to moderators",0
+"download attachments from a thread","download **images only** from a thread",0
+"how to restore deleted comments","how to restore deleted **posts**",0
+"explain event sourcing with examples","explain **CQRS** with examples",0
+"compare json schema and protobuf","compare json schema and **avro**",0
+"posts about linux laptops under $1000","linux laptops under $1000 posts",1
+"recommend a quiet mechanical keyboard","quiet mechanical keyboard recommendations",1
+"how to calibrate a monitor for design","monitor calibration for design",1
+"3d printing beginner mistakes","beginner mistakes in 3d printing",1
+"bike commuting in rainy cities tips","tips for bike commuting in rain",1
+"budget microphones for podcasting","podcasting budget microphones",1
+"pet-friendly travel checklist","checklist for pet friendly travel",1
+"best books on distributed systems","top books on distributed systems",1
+"recipes for quick weeknight dinners","quick weeknight dinner recipes",1
+"board games for 2 players strategy","strategy board games for two players",1
+"posts about linux laptops under $1000","posts about linux laptops under **$1500**",0
+"recommend a quiet mechanical keyboard","recommend a **wireless** mechanical keyboard",0
+"how to calibrate a monitor for design","how to calibrate a monitor for **gaming**",0
+"3d printing beginner mistakes","3d printing **advanced** mistakes",0
+"bike commuting in rainy cities tips","bike commuting in **snowy** cities tips",0
+"budget microphones for podcasting","budget microphones for **streaming**",0
+"pet-friendly travel checklist","pet-friendly **air travel** checklist",0
+"best books on distributed systems","best books on **operating systems**",0
+"recipes for quick weeknight dinners","recipes for quick **vegetarian** dinners",0
+"board games for 2 players strategy","board games for **party** games",0
+"how to embed images in markdown","embed images in markdown",1
+"vpn keeps disconnecting on windows","windows vpn keeps disconnecting",1
+"ssh agent forwarding security risks","security risks of ssh agent forwarding",1
+"how to enable http3 in nginx","enable http3 in nginx",1
+"cuda out of memory tips","tips for cuda out of memory",1
+"mac shortcuts for window management","window management shortcuts mac",1
+"postgres query plan explanation basics","basics of explaining postgres query plan",1
+"golang context cancellation patterns","patterns for golang context cancellation",1
+"react suspense data fetching examples","examples of react suspense data fetching",1
+"docker buildkit secrets usage","using docker buildkit secrets",1
+"how to embed images in markdown","how to **resize** images in markdown",0
+"vpn keeps disconnecting on windows","vpn keeps disconnecting on **mac**",0
+"ssh agent forwarding security risks","ssh **X11** forwarding security risks",0
+"how to enable http3 in nginx","how to enable **http2** in nginx",0
+"cuda out of memory tips","cuda **illegal memory access** tips",0
+"mac shortcuts for window management","mac shortcuts for **clipboard**",0
+"postgres query plan explanation basics","postgres query **index** explanation basics",0
+"golang context cancellation patterns","golang context **timeouts** patterns",0
+"react suspense data fetching examples","react suspense **concurrent ui** examples",0
+"docker buildkit secrets usage","docker buildkit **cache mounts** usage",0
+"find threads by author:dan about ssh","threads about ssh by author:dan",1
+"list of pinned posts in devops tag","pinned posts list tag:devops",1
+"restore a locked account steps","steps to restore a locked account",1
+"rss feed for security tag","security tag rss feed",1
+"open source licenses comparison","comparison of open source licenses",1
+"disable inline code linting in vscode","turn off inline code linting vscode",1
+"run multiple versions of python side by side","run multiple python versions side by side",1
+"explain database sharding vs partitioning","sharding vs partitioning explained",1
+"regex backreference examples","examples of regex backreferences",1
+"rate limit strategies with redis","rate limiting strategies with redis",1
+"find threads by author:dan about ssh","find threads by author:**ann** about ssh",0
+"list of pinned posts in devops tag","list of pinned posts in **security** tag",0
+"restore a locked account steps","restore a **banned** account steps",0
+"rss feed for security tag","rss feed for **privacy** tag",0
+"open source licenses comparison","open source **copyleft** licenses comparison",0
+"disable inline code linting in vscode","disable inline code linting in **jetbrains**",0
+"run multiple versions of python side by side","run multiple versions of **node** side by side",0
+"explain database sharding vs partitioning","explain database **replication** vs partitioning",0
+"regex backreference examples","regex **lookbehind** examples",0
+"rate limit strategies with redis","rate limit strategies with **nginx**",0
+"how to filter search by solved threads only","filter to solved threads only",1
+"search within this thread only","search only in this thread",1
+"compare two-factor and passkeys","compare passkeys with two-factor",1
+"docker compose v2 migration notes","notes on migrating to docker compose v2",1
+"find tutorials for pandas merge","pandas merge tutorials",1
+"secure cookies across subdomains","secure cookies across subdomains setup",1
+"setting up oidc with keycloak","keycloak oidc setup",1
+"optimize images for webp","optimize images to webp",1
+"monitor node memory leaks tools","tools for monitoring node memory leaks",1
+"apache vs nginx for static files","nginx vs apache for static files",1
+"how to filter search by solved threads only","how to filter search by **unsolved** threads only",0
+"search within this thread only","search within this **category** only",0
+"compare two-factor and passkeys","compare **sms 2fa** and passkeys",0
+"docker compose v2 migration notes","docker **swarm** migration notes",0
+"find tutorials for pandas merge","find tutorials for pandas **join**",0
+"secure cookies across subdomains","secure cookies across **multiple top-level domains**",0
+"setting up oidc with keycloak","setting up **saml** with keycloak",0
+"optimize images for webp","optimize images for **avif**",0
+"monitor node memory leaks tools","monitor node **event loop** lag tools",0
+"apache vs nginx for static files","apache vs nginx for **php-fpm**",0
+"find moderator announcements in July 2025","moderator announcements July 2025",1
+"threads discussing GDPR updates 2025","GDPR updates 2025 discussions",1
+"best laptops threads 2025 edition","2025 edition best laptops threads",1
+"tag:beta-features feedback requested","feedback requested tag:beta-features",1
+"changelog for forum v3.2","forum v3.2 changelog",1
+"security incidents after:2025-05-01","after:2025-05-01 security incidents",1
+"dark theme accessibility audit results","accessibility audit results dark theme",1
+"posts with polls about remote work","posts with polls about remote work has:poll",1
+"threads with accepted answers on grpc","is:solved grpc threads",1
+"where to find site rules and etiquette","site rules and etiquette",1
+"find moderator announcements in July 2025","find moderator announcements in **June** 2025",0
+"threads discussing GDPR updates 2025","threads discussing **CCPA** updates 2025",0
+"best laptops threads 2025 edition","best **phones** threads 2025 edition",0
+"tag:beta-features feedback requested","tag:beta-features feedback requested **in Spanish**",0
+"changelog for forum v3.2","changelog for forum **v3.3**",0
+"security incidents after:2025-05-01","security incidents **before:2025-05-01**",0
+"dark theme accessibility audit results","**light** theme accessibility audit results",0
+"posts with polls about remote work","posts with **surveys** about remote work",0
+"threads with accepted answers on grpc","threads with accepted answers on **graphql**",0
+"where to find site rules and etiquette","where to find **api** rules and etiquette",0
+"search exact phrase \"cannot allocate memory\"","\"cannot allocate memory\" exact phrase",1
+"tag:ai policy discussion","policy discussion tag:ai",1
+"compare markdown editors used by the community","community-used markdown editors comparison",1
+"recommend beginner kubernetes courses","beginner kubernetes course recommendations",1
+"find guides for migrating email providers","guides for migrating email providers",1
+"threads about passwordless auth ux","passwordless auth UX threads",1
+"list weekend projects under 4 hours","weekend projects under 4 hours list",1
+"tips for silent pc builds","silent pc build tips",1
+"monitoring uptime with blackbox exporter","blackbox exporter for uptime monitoring",1
+"npm workspaces with turborepo gotchas","gotchas using npm workspaces with turborepo",1
+"search exact phrase \"cannot allocate memory\"","exact phrase \"out of memory\"",0
+"tag:ai policy discussion","tag:ai **ethics** discussion",0
+"compare markdown editors used by the community","compare markdown editors used by the **design** community",0
+"recommend beginner kubernetes courses","recommend **advanced** kubernetes courses",0
+"find guides for migrating email providers","find guides for migrating **cloud** providers",0
+"threads about passwordless auth ux","threads about **2fa** auth ux",0
+"list weekend projects under 4 hours","list weekend projects under **8** hours",0
+"tips for silent pc builds","tips for **rgb** pc builds",0
+"monitoring uptime with blackbox exporter","monitoring uptime with **ping** only",0
+"npm workspaces with turborepo gotchas","pnpm workspaces with turborepo gotchas",0
+"find threads linking to arXiv papers","threads linking to arXiv has:link",1
+"how to archive a thread","archive a discussion thread",1
+"view profile change history","profile change history view",1
+"enable two-factor for forum account","enable two factor authentication for forum account",1
+"how to create a community wiki post","create a community wiki post",1
+"pin a helpful answer to top","pin a helpful answer",1
+"export my post history as csv","export my post history to csv",1
+"request username change policy","policy for username changes",1
+"appeal a moderation decision","appeal moderation decision",1
+"find threads with image attachments only","threads with image attachments only has:image",1
+"find threads linking to arXiv papers","find threads linking to **SSRN** papers",0
+"how to archive a thread","how to **lock** a thread",0
+"view profile change history","view profile change history **api**",0
+"enable two-factor for forum account","disable two factor for forum account",0
+"how to create a community wiki post","how to create a **private** post",0
+"pin a helpful answer to top","pin a helpful answer **for 7 days**",0
+"export my post history as csv","export my post history as **json**",0
+"request username change policy","request **account deletion** policy",0
+"appeal a moderation decision","appeal a moderation decision **template**",0
+"find threads with image attachments only","find threads with **video** attachments only",0
+"Best horror movies from the 1990s","Top 1990s horror films list",1
+"Best horror movies from the 1990s","Best horror movies from the 2000s",0
+"Advice on handling exam stress","Tips for managing stress during exams",1
+"Advice on handling exam stress","Advice for dealing with stress at work",0
+"Where to watch Studio Ghibli films online","Online streaming options for Studio Ghibli",1
+"Where to watch Studio Ghibli films online","Where to watch Pixar movies online",0
+"Healthy dinner recipes under 500 calories","Low-calorie dinner recipes under 500 calories",1
+"Healthy dinner recipes under 500 calories","Healthy dinner recipes under 800 calories",0
+"How to make long-distance relationships work","Advice on maintaining long-distance relationships",1
+"How to make long-distance relationships work","How to end a long-distance relationship peacefully",0
+"Best novels for teenagers","Top books recommended for teens",1
+"Best novels for teenagers","Best novels for senior citizens",0
+"Top fantasy TV shows to binge","Good fantasy series to watch",1
+"Top fantasy TV shows to binge","Top science fiction TV shows to binge",0
+"Scholarships available for international students","Funding opportunities for international students",1
+"Scholarships available for international students","Internship opportunities for international students",0
+"Side effects of drinking too much coffee","Health risks of excessive coffee consumption",1
+"Side effects of drinking too much coffee","Health benefits of drinking coffee daily",0
+"Budget travel tips for Europe","Cheap travel advice for Europe",1
+"Budget travel tips for Europe","Luxury travel tips for Europe",0
+"How to build confidence in public speaking","Tips for speaking confidently in public",1
+"How to build confidence in public speaking","How to overcome shyness at parties",0
+"Top romantic comedies on Netflix","Best rom-coms available on Netflix",1
+"Top romantic comedies on Netflix","Top action movies on Netflix",0
+"How to manage time better in college","College tips for effective time management",1
+"How to manage time better in college","How to choose the right college major",0
+"Famous paintings from the Renaissance","Renaissance art masterpieces",1
+"Famous paintings from the Renaissance","Modern digital art techniques",0
+"How to prepare for a first job interview","First job interview preparation tips",1
+"How to prepare for a first job interview","Best outfits for weddings and parties",0
+"Best hiking trails in California","Top California hikes",1
+"Best hiking trails in California","Best skiing spots in California",0
+"How to save money as a student","Budgeting advice for college students",1
+"How to save money as a student","Best part-time jobs for students",0
+"Top mysteries with unexpected endings","Best plot-twist mystery novels",1
+"Top mysteries with unexpected endings","Best romance novels of 2024",0
+"How to deal with roommate conflicts","Advice for handling conflicts with roommates",1
+"How to deal with roommate conflicts","How to find a new roommate quickly",0
+"Top romantic destinations in Europe","Most romantic places to visit in Europe",1
+"Top romantic destinations in Europe","Best budget destinations in Europe",0
+"Simple meditation techniques for beginners","Easy meditation methods for newbies",1
+"Simple meditation techniques for beginners","Advanced meditation retreats in India",0
+"Best true crime documentaries","Top documentaries about real crimes",1
+"Best true crime documentaries","Best comedy specials on Netflix",0
+"Tips for staying motivated while studying","Ways to keep motivated during study sessions",1
+"Tips for staying motivated while studying","How to get better grades without studying",0
+"Popular pet breeds for families","Best pets for family households",1
+"Popular pet breeds for families","Exotic reptiles as pets",0
+"How to write a strong college essay","Tips for writing a great college application essay",1
+"How to write a strong college essay","How to write a professional business report",0
+"Best pizza toppings combinations","Most popular pizza topping choices",1
+"Best pizza toppings combinations","Best pasta sauce recipes",0
+"Movies that make you cry","Films guaranteed to make you emotional",1
+"Movies that make you cry","Movies that will make you laugh out loud",0
+"Tips for adjusting to life in a new city","Advice on adapting after moving to a new city",1
+"Tips for adjusting to life in a new city","How to choose which city to move to",0
+"Best motivational TED talks","Top inspirational TED presentations",1
+"Best motivational TED talks","Best horror movie trailers",0
+"How to plan a road trip with friends","Planning tips for a group road trip",1
+"How to plan a road trip with friends","How to plan a solo backpacking trip",0
+"Books similar to Harry Potter","Novels like the Harry Potter series",1
+"Books similar to Harry Potter","Books about space exploration",0
+"Signs of burnout at work","Symptoms of workplace burnout",1
+"Signs of burnout at work","Benefits of a productive workplace",0
+"Top musicals of all time","Best Broadway musicals ever made",1
+"Top musicals of all time","Top stand-up comedy shows of all time",0
+"How to overcome fear of failure","Tips for dealing with failure anxiety",1
+"How to overcome fear of failure","How to celebrate success effectively",0
+"Best documentaries about nature","Top nature documentaries to watch",1
+"Best documentaries about nature","Best romantic comedies on Hulu",0
+"How to learn a new language quickly","Fastest ways to pick up a new language",1
+"How to learn a new language quickly","How to improve your English writing style",0
+"Movies with the best soundtracks","Films famous for great music scores",1
+"Movies with the best soundtracks","Movies with great fight scenes",0
+"Tips for dealing with procrastination","How to stop procrastinating effectively",1
+"Tips for dealing with procrastination","How to develop creativity skills",0
+"Best podcasts for true crime fans","Top true crime podcast recommendations",1
+"Best podcasts for true crime fans","Best travel vlogs to watch",0
+"How to build healthy morning routines","Creating productive morning habits",1
+"How to build healthy morning routines","How to build healthy evening routines",0
+"Best comedies of the 1980s","Top 1980s comedy films",1
+"Best comedies of the 1980s","Best action films of the 1980s",0
+"How to manage social anxiety","Tips for overcoming social anxiety",1
+"How to manage social anxiety","How to improve public speaking humor",0
+"Best board games for families","Top family board game recommendations",1
+"Best board games for families","Best video games for teenagers",0
