@@ -2,7 +2,6 @@ import argparse
 import os
 import random
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import torch
@@ -11,10 +10,11 @@ from llm_sim_eval.prompts import DEFAULT_PROMPTS, Prompt
 
 from src.customer_analysis import (
     FileHandler,
-    NeuralEmbedding,
     generate_plots,
     load_data,
     postprocess_results_for_metrics,
+    run_matching,
+    run_matching_redis,
     sweep_thresholds_on_results,
 )
 
@@ -24,27 +24,6 @@ RANDOM_SEED = 42
 random.seed(RANDOM_SEED)
 np.random.seed(RANDOM_SEED)
 torch.manual_seed(RANDOM_SEED)
-
-
-def run_matching(queries, cache, args):
-    embedding_model = NeuralEmbedding(args.model_name, device="cuda" if torch.cuda.is_available() else "cpu")
-
-    queries["best_scores"] = 0
-
-    best_indices, best_scores, decision_methods = embedding_model.calculate_best_matches_with_cache_large_dataset(
-        queries=queries[args.sentence_column].to_list(),
-        cache=cache[args.sentence_column].to_list(),
-        batch_size=512,
-        early_stop=min(args.n_samples, len(queries)),
-    )
-
-    queries["best_scores"] = best_scores
-    queries["matches"] = cache.iloc[best_indices][args.sentence_column].to_list()
-
-    del embedding_model
-    torch.cuda.empty_cache()
-
-    return queries
 
 
 def run_llm_as_a_judge(query_pairs, args):
@@ -88,7 +67,10 @@ def main(args):
     # Stage one: Matching
     # ------------------------------
     print("Stage one: Matching...")
-    queries = run_matching(queries, cache, args)
+    if args.use_redis:
+        queries = run_matching_redis(queries, cache, args)
+    else:
+        queries = run_matching(queries, cache, args)
 
     matches_handler = FileHandler(make_output_path("matches.csv"))
     matches_handler.write_csv(queries[[args.sentence_column, "matches", "best_scores"]])
@@ -145,6 +127,22 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--llm_name", type=str, required=False, default="microsoft/Phi-4-mini-instruct", help="Name of the LLM to use"
+    )
+    parser.add_argument("--use_redis", action="store_true", help="Use Redis for matching (default: False)")
+    parser.add_argument(
+        "--redis_url",
+        type=str,
+        default="redis://localhost:6379",
+        help="Redis connection URL (default: redis://localhost:6379)",
+    )
+    parser.add_argument(
+        "--redis_index_name", type=str, default="idx_cache_match", help="Redis index name (default: idx_cache_match)"
+    )
+    parser.add_argument(
+        "--redis_doc_prefix", type=str, default="cache:", help="Redis document key prefix (default: cache:)"
+    )
+    parser.add_argument(
+        "--redis_batch_size", type=int, default=256, help="Batch size for Redis vector operations (default: 256)"
     )
     args = parser.parse_args()
 

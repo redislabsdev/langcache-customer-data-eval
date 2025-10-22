@@ -2,6 +2,7 @@ import os
 
 import matplotlib.pyplot as plt
 import pandas as pd
+
 from src.customer_analysis.s3_util import s3_upload_dataframe_csv, s3_upload_matplotlib_png
 
 

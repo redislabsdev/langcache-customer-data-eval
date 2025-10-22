@@ -63,6 +63,13 @@ Cache Hit Ratios at common thresholds:
 | `--model_name`      |  str |          | `"redis/langcache-embed-v3.1"`   | Embedding model name used to perform the ranking               |
 | `--sweep_steps`     |  int |          | `200`                            | Number of threshold steps in the sweep.                        |
 
+| Flag                   | Type | Required | Default                           | Description                                                         |
+| ---------------------- | ---: | :------: | --------------------------------- | ------------------------------------------------------------------- |
+| `--use_redis`          | flag |          | `False`                           | Use Redis for vector matching (default: in-memory matching).        |
+| `--redis_url`          |  str |          | `"redis://localhost:6379"`        | Redis connection URL for vector search.                             |
+| `--redis_index_name`   |  str |          | `"idx_cache_match"`               | Redis index name for vector storage.                                |
+| `--redis_doc_prefix`   |  str |          | `"cache:"`                        | Redis document key prefix.                                          |
+| `--redis_batch_size`   |  int |          | `256`                             | Batch size for Redis vector operations.                             |
 ---
 ### How it works
 
