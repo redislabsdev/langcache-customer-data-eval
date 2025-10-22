@@ -22,9 +22,6 @@ def run_matching_redis(queries: pd.DataFrame, cache: pd.DataFrame, args):
       - optional: args.n_samples, args.index_name, args.prefix, args.redis_url, args.batch_size, args.device
     """
     text_col = args.sentence_column
-    n_queries = len(queries)
-    if getattr(args, "n_samples", None):
-        n_queries = min(n_queries, int(args.n_samples))
 
     rindex = RedisVectorIndex(
         col_query=text_col,
@@ -44,7 +41,7 @@ def run_matching_redis(queries: pd.DataFrame, cache: pd.DataFrame, args):
         rindex.load_texts_and_vecs(cache_texts, cache_vecs)
 
         # 3) embed queries and search top-1
-        query_texts = queries[text_col].head(n_queries).tolist()
+        query_texts = queries[text_col].tolist()
         query_vecs = rindex._embed_batch(query_texts)
 
         best_scores: list[float] = []
@@ -62,12 +59,6 @@ def run_matching_redis(queries: pd.DataFrame, cache: pd.DataFrame, args):
 
             best_scores.append(cosine_sim)
             matches.append(hit[text_col])
-
-        # pad if n_samples < total rows
-        if n_queries < len(queries):
-            pad = len(queries) - n_queries
-            best_scores.extend([0.0] * pad)
-            matches.extend([""] * pad)
 
         # 4) attach outputs
         out = queries.copy()
@@ -90,7 +81,6 @@ def run_matching(queries, cache, args):
         queries=queries[args.sentence_column].to_list(),
         cache=cache[args.sentence_column].to_list(),
         batch_size=512,
-        early_stop=args.n_samples,
     )
 
     queries["best_scores"] = best_scores
