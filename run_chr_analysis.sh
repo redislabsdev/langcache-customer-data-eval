@@ -1,4 +1,4 @@
-uv run chr_analysis.py --query_log_path dataset/chatgpt.csv \
+uv run evaluation.py --query_log_path dataset/chatgpt.csv \
     --sentence_column text \
     --output_dir output_files \
     --n_samples 500 \

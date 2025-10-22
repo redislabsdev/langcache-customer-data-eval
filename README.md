@@ -4,22 +4,21 @@ Evaluate how a semantic cache performs on your dataset by computing the two key 
 - **Cache Hit Ratio (CHR)**: fraction of queries whose similarity_score ≥ τ — i.e., the share served from cache at threshold τ.
 - **Precision**: among those hits, the fraction that are actually correct (truly similar).
 
+**One unified script with two modes:**
+- **Default (CHR-only)**: Fast cache hit ratio analysis without LLM → threshold sweep and CHR plots
+- **Full mode (`--full`)**: Complete pipeline with LLM-as-a-Judge → precision, recall, F1, and cache hit ratio metrics
+
 Why an LLM? We use an **LLM-as-a-Judge** to produce proxy ground‑truth labels for each `(query, match)` pair, so you can calculate precision without manual annotation.
 
-Run evaluations for semantic caching with neural embeddings and optional LLM-as-a-Judge:
-
-- **`cache_evaluation.py`**: Full pipeline with LLM judge → precision, recall, F1, and cache hit ratio metrics
-- **`chr_analysis.py`**: Fast cache hit ratio analysis without LLM judge → threshold sweep and CHR plots
-
-Both scripts support **local or S3** inputs/outputs and optional **GPU acceleration**.
-
-Under the hood, the pipeline (1) finds nearest matches for each user query using neural embeddings, (2) asks an LLM to judge similarity, (3) computes metrics across score thresholds, and (4) generates plots — with support for **local or S3** inputs/outputs and optional **GPU acceleration**.
+The pipeline finds nearest matches for each user query using neural embeddings, optionally asks an LLM to judge similarity, computes metrics across score thresholds, and generates plots — with support for **local or S3** inputs/outputs and optional **GPU acceleration**.
 
 ## ✨ Features
 
-* **Two evaluation modes**
-  Choose full LLM-judged metrics (`cache_evaluation.py`) or fast cache-hit-ratio-only analysis (`chr_analysis.py`).
-* **Two‑stage scoring** *(cache_evaluation.py only)*
+* **Two evaluation modes in one script**
+  Choose full LLM-judged metrics (`evaluation.py --full`) or fast cache-hit-ratio-only analysis (`evaluation.py`).
+* **Conditional LLM dependency**
+  The `llm-sim-eval` package is only required for `--full` mode. Run CHR-only analysis without it.
+* **Two‑stage scoring** *(--full mode only)*
   Neural embedding matching followed by **LLM‑as‑a‑Judge** for higher‑quality similarity signals.
 * **Metrics & plots out of the box**
   Saves CSVs and generates threshold‑sweep visualizations to help tune decision thresholds.
@@ -102,9 +101,24 @@ id,text
 
 ### 4) Run
 
+**CHR-only mode (default - no LLM required):**
+
+```bash
+# Fast cache hit ratio analysis
+uv run evaluation.py \
+  --query_log_path ./data/queries.csv \
+  --cache_path ./data/cache.csv \
+  --sentence_column text \
+  --output_dir ./outputs \
+  --n_samples 100 \
+  --model_name "redis/langcache-embed-v3.1"
+```
+
+**Full evaluation mode (requires llm-sim-eval):**
+
 ```bash
 # With Redis (recommended for better performance)
-uv run cache_evaluation.py \
+uv run evaluation.py \
   --query_log_path ./data/queries.csv \
   --cache_path ./data/cache.csv \
   --sentence_column text \
@@ -112,27 +126,38 @@ uv run cache_evaluation.py \
   --n_samples 1000 \
   --model_name "redis/langcache-embed-v1" \
   --llm_name "microsoft/Phi-4-mini-instruct" \
+  --full \
   --use_redis
 
 # Without Redis (in-memory matching)
-uv run cache_evaluation.py \
+uv run evaluation.py \
   --query_log_path ./data/queries.csv \
   --cache_path ./data/cache.csv \
   --sentence_column text \
   --output_dir ./outputs \
   --n_samples 1000 \
   --model_name "redis/langcache-embed-v1" \
-  --llm_name "microsoft/Phi-4-mini-instruct"
+  --llm_name "microsoft/Phi-4-mini-instruct" \
+  --full
 ```
 
 **S3 example**
 
 ```bash
-uv run cache_evaluation.py \
+# CHR-only with S3
+uv run evaluation.py \
   --query_log_path s3://my-bucket/eval/queries.csv \
   --cache_path s3://my-bucket/eval/cache.csv \
   --sentence_column text \
   --output_dir s3://my-bucket/eval/results
+
+# Full evaluation with S3
+uv run evaluation.py \
+  --query_log_path s3://my-bucket/eval/queries.csv \
+  --cache_path s3://my-bucket/eval/cache.csv \
+  --sentence_column text \
+  --output_dir s3://my-bucket/eval/results \
+  --full
 ```
 
 > S3 access relies on your environment (e.g., `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`).
@@ -143,13 +168,25 @@ uv run cache_evaluation.py \
 
 > High‑level flow (see code for details):
 
+### Common stages (both modes):
+
 1. **Load data**
    `load_data(query_log_path, cache_path, n_samples)` → `queries` and `cache` DataFrames.
 
 2. **Stage 1 — Matching**
    Uses `NeuralEmbedding(model_name, device=auto)` and
-   `calculate_best_matches_with_cache_large_dataset(...)` to find top matches for each query (batch size `512`, early stop at `n_samples`).
-   **Output:** `matches.csv` with `[<sentence_column>, matches, best_scores]`.
+   `calculate_best_matches_with_cache_large_dataset(...)` to find top matches for each query (batch size `512`).
+
+### CHR-only mode (default):
+
+3. **Threshold sweep for cache hit ratios**
+   Sweeps thresholds from min score to 1.0, calculating CHR at each point.
+   **Output:** `chr_sweep.csv`, `chr_matches.csv`
+
+4. **Plotting & summary**
+   Generates `chr_vs_threshold.png` and prints summary statistics (score distribution, CHR at common thresholds).
+
+### Full mode (--full flag):
 
 3. **Stage 2 — LLM‑as‑a‑Judge**
    Pairs `(query, match)` are scored by `run_llm_local_sim_prediction_pipeline(...)` using an **empty prompt** loaded via `DEFAULT_PROMPTS`.
@@ -157,7 +194,7 @@ uv run cache_evaluation.py \
 
 4. **Stage 3 — Metrics & threshold sweep**
    `postprocess_results_for_metrics(...)` prepares a final frame, then `sweep_thresholds_on_results(...)` evaluates metrics across thresholds.
-   **Output:** `threshold_sweep_results.csv`.
+   **Output:** `threshold_sweep_results.csv`, `matches.csv`
 
 5. **Stage 4 — Plotting**
    `generate_plots(...)` writes:
@@ -171,17 +208,19 @@ Finally prints `Done!`.
 
 ## Command‑line arguments
 
-### customer_evaluation.py
+### evaluation.py
 
 | Flag                   | Type | Required | Default                           | Description                                                         |
 | ---------------------- | ---: | :------: | --------------------------------- | ------------------------------------------------------------------- |
 | `--query_log_path`     |  str |     ✅    | —                                 | Path to the **queries CSV** (local or `s3://…`).                    |
 | `--sentence_column`    |  str |     ✅    | —                                 | Name of the text column to evaluate (must exist in both CSVs).      |
 | `--output_dir`         |  str |     ✅    | —                                 | Where to write CSVs/plots (local or `s3://…`).                      |
-| `--n_samples`          |  int |          | `1000`                            | Max queries to evaluate (also used as an "early stop" in matching). |
-| `--model_name`         |  str |          | `"redis/langcache-embed-v1"`      | Embedding model passed to `NeuralEmbedding`.                        |
+| `--n_samples`          |  int |          | `100`                             | Number of samples to evaluate (default: 100).                       |
+| `--model_name`         |  str |          | `"redis/langcache-embed-v3.1"`    | Embedding model passed to `NeuralEmbedding`.                        |
 | `--cache_path`         |  str |          | `None`                            | Path to the **cache CSV** (local or `s3://…`).                      |
-| `--llm_name`           |  str |          | `"microsoft/Phi-4-mini-instruct"` | Local LLM identifier used by the judging pipeline.                  |
+| `--full`               | flag |          | `False`                           | Run full evaluation with LLM-as-a-Judge (requires llm-sim-eval).    |
+| `--llm_name`           |  str |          | `"microsoft/Phi-4-mini-instruct"` | Local LLM identifier (only used with `--full`).                     |
+| `--sweep_steps`        |  int |          | `200`                             | Number of threshold steps in sweep (default: 200).                  |
 | `--use_redis`          | flag |          | `False`                           | Use Redis for vector matching (default: in-memory matching).        |
 | `--redis_url`          |  str |          | `"redis://localhost:6379"`        | Redis connection URL for vector search.                             |
 | `--redis_index_name`   |  str |          | `"idx_cache_match"`               | Redis index name for vector storage.                                |
@@ -201,6 +240,12 @@ Finally prints `Done!`.
 
 **Outputs** (written under `--output_dir`)
 
+### CHR-only mode (default):
+* `chr_matches.csv` — `[<sentence_column>, matches, best_scores]`
+* `chr_sweep.csv` — `[threshold, cache_hit_ratio]`
+* `chr_vs_threshold.png` — Plot of cache hit ratio vs threshold
+
+### Full mode (--full):
 * `matches.csv` — `[<sentence_column>, matches, best_scores]`
 * `llm_as_a_judge_results.csv` — `[<sentence_column>, matches, similarity_score, actual_label]`
 * `threshold_sweep_results.csv` — thresholded metrics across the sweep
@@ -280,14 +325,26 @@ We welcome improvements — add new metrics, plots, or backends and send a PR. A
 
 ---
 
+## Choosing the right mode
+
+**Use CHR-only mode (default) when:**
+- You want to quickly understand cache hit ratio characteristics
+- You don't need precision/recall metrics (only CHR)
+- You want to avoid the overhead of running an LLM judge
+- You're doing exploratory analysis on embedding model performance
+- The `llm-sim-eval` package is not available in your environment
+
+**Use full mode (--full) when:**
+- You need precision, recall, and F-scores
+- You have labeled data or need LLM-judged similarity labels
+- You want the full evaluation pipeline with quality metrics
+- You need to understand both cache efficiency (CHR) and accuracy (precision)
+
 **CLI help**
 
 ```bash
-# Full evaluation pipeline with LLM-as-a-Judge
-uv run cache_evaluation.py -h
-
-# Cache hit ratio analysis only
-uv run chr_analysis.py -h
+# See all available options
+uv run evaluation.py -h
 ```
 
 [1]: https://github.com/redis-applied-ai/redis-model-store "GitHub - redis-applied-ai/redis-model-store: AI/ML model versioning and storage engine backed by Redis."

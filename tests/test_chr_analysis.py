@@ -5,11 +5,11 @@ import unittest
 import numpy as np
 import pandas as pd
 
-from chr_analysis import (
+from evaluation import (
     calculate_cache_hit_ratio_for_threshold,
-    load_data,
     sweep_cache_hit_ratios,
 )
+from src.customer_analysis import load_data
 
 
 class TestCacheHitRatioAnalysis(unittest.TestCase):

@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 import redis
 
-from chr_analysis import run_matching_redis
+from src.customer_analysis import run_matching_redis
 
 
 class DummyArgs:
