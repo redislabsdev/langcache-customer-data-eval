@@ -23,6 +23,7 @@ class FileHandler:
     def write_csv(df: pd.DataFrame, output_dir: str = None, filename: str = None, index: bool = False):
         """Write dataframe to CSV file."""
         assert output_dir is not None and filename is not None, "output_dir and filename must be provided"
+        os.makedirs(output_dir, exist_ok=True)
         path = make_output_path(output_dir, filename)
         if output_dir.startswith("s3://"):
             s3_upload_dataframe_csv(df.reset_index() if index else df, path)
@@ -39,6 +40,7 @@ class FileHandler:
     @staticmethod
     def save_matplotlib_plot(output_dir: str = None, filename: str = None, dpi: int = 150):
         """Save current matplotlib plot."""
+        os.makedirs(output_dir, exist_ok=True)
         path = make_output_path(output_dir, filename)
         if path.startswith("s3://"):
             s3_upload_matplotlib_png(path, dpi=dpi)
