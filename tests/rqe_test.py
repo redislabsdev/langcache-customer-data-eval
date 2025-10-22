@@ -53,6 +53,7 @@ def test_run_matching_basic(redis_client):
         assert isinstance(row["best_scores"], float) or row["best_scores"] is None
 
     # Check that the matches make sense: for query[0] about baking bread, expect “how to bake bread”
+    assert out_df['matches'].notnull().any()
     assert "bread" in out_df.iloc[0]["matches"].lower()
 
 
