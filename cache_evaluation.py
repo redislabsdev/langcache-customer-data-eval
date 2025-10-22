@@ -2,7 +2,6 @@ import argparse
 import os
 import random
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import torch
@@ -11,7 +10,6 @@ from llm_sim_eval.prompts import DEFAULT_PROMPTS, Prompt
 
 from src.customer_analysis import (
     FileHandler,
-    NeuralEmbedding,
     generate_plots,
     load_data,
     postprocess_results_for_metrics,
@@ -63,7 +61,7 @@ def main(args):
             return os.path.join(args.output_dir, filename)
 
     # Input paths are used directly - they can already be full S3 or local paths
-    queries, cache = load_data(args.query_log_path, args.cache_path, args.n_samples)
+    queries, cache = load_data(query_log_path=args.query_log_path, cache_path=args.cache_path, n_samples=args.n_samples)
 
     # ------------------------------
     # Stage one: Matching

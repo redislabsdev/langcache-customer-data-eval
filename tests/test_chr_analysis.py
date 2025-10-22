@@ -97,15 +97,21 @@ class TestCacheHitRatioAnalysis(unittest.TestCase):
 
         # Load data
         queries, cache = load_data(test_csv_path, n_samples=3)
-
+        
         # Check that queries has correct size
         self.assertEqual(len(queries), 3)
-
-        # Check that cache has remaining data
+        
+        # Check that cache has remaining data (5 total - 3 queries = 2 cache entries)
         self.assertEqual(len(cache), 2)
-
-        # Check that queries are from the beginning
-        self.assertEqual(queries["sentence1"].tolist(), ["query1", "query2", "query3"])
+        
+        # Check that queries and cache don't overlap (no common indices)
+        query_sentences = set(queries["sentence1"])
+        cache_sentences = set(cache["sentence1"])
+        self.assertEqual(len(query_sentences.intersection(cache_sentences)), 0)
+        
+        # Check that all original data is accounted for
+        all_original_sentences = set(test_data["sentence1"])
+        self.assertEqual(all_original_sentences, query_sentences.union(cache_sentences))
 
     def test_load_data_all_samples(self):
         """Test loading all data when n_samples >= total rows."""
@@ -119,10 +125,16 @@ class TestCacheHitRatioAnalysis(unittest.TestCase):
 
         # Request more samples than available
         queries, cache = load_data(test_csv_path, n_samples=10)
-
-        # Should only get 3 (all available)
+        
+        # Should only get 3 (all available) for queries
         self.assertEqual(len(queries), 3)
+        # Cache should be empty since all data was used for queries
         self.assertEqual(len(cache), 0)
+        
+        # All original data should be in queries
+        all_original_text = set(test_data["sentence1"])
+        all_queries_text = set(queries["sentence1"])
+        self.assertEqual(all_original_text, all_queries_text)
 
     def test_cache_hit_ratio_edge_cases(self):
         """Test edge cases for cache hit ratio calculation."""

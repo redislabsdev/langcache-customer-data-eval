@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import torch
 
-from src.customer_analysis import FileHandler, run_matching, run_matching_redis
+from src.customer_analysis import FileHandler, load_data, run_matching, run_matching_redis
 
 RANDOM_SEED = 42
 
@@ -68,31 +68,6 @@ def plot_cache_hit_ratio(results_df: pd.DataFrame, output_path: str):
     handler.save_matplotlib_plot()
 
 
-def load_data(data_path: str, n_samples: int):
-    """
-    Load data for cache hit ratio analysis.
-
-    Args:
-        data_path: Path to the CSV file
-        n_samples: Number of samples to analyze
-
-    Returns:
-        Tuple of (queries, cache) DataFrames
-    """
-    handler = FileHandler(data_path)
-    data = handler.read_csv()
-
-    # Take first n_samples as queries
-    queries = data.head(n_samples).reset_index(drop=True)
-
-    # Use rest of the data as cache
-    cache = data.iloc[n_samples:].reset_index(drop=True)
-
-    print(f"Loaded {len(queries)} queries and {len(cache)} cache entries")
-
-    return queries, cache
-
-
 def main(args):
     """Main function for cache hit ratio analysis."""
 
@@ -105,11 +80,7 @@ def main(args):
 
     # Load data
     print("Loading data...")
-    queries, cache = load_data(args.data_path, args.n_samples)
-
-    assert len(cache) > 0, "Cache is empty"
-    assert len(queries) > 0, "Queries are empty"
-
+    queries, cache = load_data(query_log_path=args.query_log_path, cache_path=args.cache_path, n_samples=args.n_samples)
     # Run matching
     print("Running matching...")
     if args.use_redis:
@@ -155,7 +126,18 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Cache Hit Ratio Analysis")
-    parser.add_argument("--data_path", type=str, required=True, help="Path to the data CSV file (local or S3)")
+    parser.add_argument(
+        "--query_log_path", 
+        type=str, 
+        required=True, 
+        help="Path to the query log CSV file (local or S3)"
+    )
+    parser.add_argument(
+        "--cache_path", 
+        type=str, 
+        default=None, 
+        help="Path to the cache CSV file (local or S3)"
+    )
     parser.add_argument("--sentence_column", type=str, required=True, help="Column name for the sentences to analyze")
     parser.add_argument("--output_dir", type=str, required=True, help="Path to the output directory (local or S3)")
     parser.add_argument("--n_samples", type=int, default=100, help="Number of samples to analyze (default: 100)")

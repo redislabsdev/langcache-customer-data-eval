@@ -6,7 +6,7 @@ For faster analysis without the LLM-as-a-Judge step, use `chr_analysis.py`. This
 2. Sweeping over threshold values to compute cache hit ratios
 3. Generating plots and CSV outputs
 
-**Key differences from `customer_evaluation.py`:**
+**Key differences from `cache_evaluation.py`:**
 - ❌ No LLM judge step → much faster, no GPU/LLM needed for judgment
 - ✅ Only evaluates cache hit ratio as a function of similarity threshold
 - ✅ Uses the same embedding and matching infrastructure
@@ -16,7 +16,7 @@ For faster analysis without the LLM-as-a-Judge step, use `chr_analysis.py`. This
 
 ```bash
 uv run chr_analysis.py \
-  --data_path ./dataset/chatgpt.csv \
+  --query_log_path ./dataset/chatgpt.csv \
   --sentence_column sentence1 \
   --output_dir ./outputs \
   --n_samples 100 \
@@ -28,7 +28,7 @@ uv run chr_analysis.py \
 
 ```bash
 uv run chr_analysis.py \
-  --data_path s3://my-bucket/data.csv \
+  --query_log_path s3://my-bucket/data.csv \
   --sentence_column text \
   --output_dir s3://my-bucket/chr-results
 ```
@@ -52,16 +52,19 @@ Cache Hit Ratios at common thresholds:
   Threshold 0.9: 12.00%
 ==================================================
 ```
-### chr_analysis.py
+### Arguments
+
+| Flag                | Type | Required | Default                          | Description                                                    |
+| ------------------- | ---: | :------: | -------------------------------- | -------------------------------------------------------------- |
+| `--query_log_path`       |  str |     ✅    | —                                | Path to the CSV file with sentences (local or `s3://…`).       |
+| `--sentence_column` |  str |     ✅    | —                                | Name of the column containing sentences to analyze.            |
+| `--output_dir`      |  str |     ✅    | —                                | Where to write CSVs/plots (local or `s3://…`).                 |
+| `--n_samples`       |  int |          | `100`                            | Number of queries to analyze (taken from start of dataset).    |
+| `--model_name`      |  str |          | `"redis/langcache-embed-v3.1"`   | Embedding model name used to perform the ranking               |
+| `--sweep_steps`     |  int |          | `200`                            | Number of threshold steps in the sweep.                        |
 
 | Flag                   | Type | Required | Default                           | Description                                                         |
 | ---------------------- | ---: | :------: | --------------------------------- | ------------------------------------------------------------------- |
-| `--data_path`          |  str |     ✅    | —                                 | Path to the **data CSV** (local or `s3://…`).                       |
-| `--sentence_column`    |  str |     ✅    | —                                 | Name of the text column to evaluate.                                |
-| `--output_dir`         |  str |     ✅    | —                                 | Where to write CSVs/plots (local or `s3://…`).                      |
-| `--n_samples`          |  int |          | `100`                             | Number of samples to analyze.                                       |
-| `--model_name`         |  str |          | `"redis/langcache-embed-v3.1"`    | Embedding model to use.                                             |
-| `--sweep_steps`        |  int |          | `200`                             | Number of threshold steps in sweep.                                 |
 | `--use_redis`          | flag |          | `False`                           | Use Redis for vector matching (default: in-memory matching).        |
 | `--redis_url`          |  str |          | `"redis://localhost:6379"`        | Redis connection URL for vector search.                             |
 | `--redis_index_name`   |  str |          | `"idx_cache_match"`               | Redis index name for vector storage.                                |
@@ -70,7 +73,7 @@ Cache Hit Ratios at common thresholds:
 ---
 ### How it works
 
-1. **Load data**: Reads `--data_path` and splits it into:
+1. **Load data**: Reads `--query_log_path` and splits it into:
    - **Queries**: First `n_samples` rows
    - **Cache**: Remaining rows
 
@@ -88,7 +91,7 @@ Cache Hit Ratios at common thresholds:
    - Cache hit ratios at common thresholds (0.5, 0.6, 0.7, 0.8, 0.9)
 
 --- 
-### When to use `chr_analysis.py` vs `customer_evaluation.py`
+### When to use `chr_analysis.py` vs `cache_evaluation.py`
 
 **Use `chr_analysis.py` when:**
 - You want to quickly understand cache hit ratio characteristics
@@ -96,7 +99,7 @@ Cache Hit Ratios at common thresholds:
 - You want to avoid the overhead of running an LLM judge
 - You're doing exploratory analysis on embedding model performance
 
-**Use `customer_evaluation.py` when:**
+**Use `cache_evaluation.py` when:**
 - You need precision, recall, and F-scores
 - You have labeled data or need LLM-judged similarity labels
 - You want the full evaluation pipeline with quality metrics
