@@ -40,6 +40,7 @@ class FileHandler:
     @staticmethod
     def save_matplotlib_plot(output_dir: str = None, filename: str = None, dpi: int = 150):
         """Save current matplotlib plot."""
+        assert output_dir is not None and filename is not None, "output_dir and filename must be provided"
         os.makedirs(output_dir, exist_ok=True)
         path = make_output_path(output_dir, filename)
         if path.startswith("s3://"):
