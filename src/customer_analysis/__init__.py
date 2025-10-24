@@ -14,7 +14,7 @@ from .metrics_util import (
     evaluate_threshold_on_results,
     sweep_thresholds_on_results,
 )
-from .plotting import generate_plots
+from .plotting import generate_plots, plot_cache_hit_ratio
 from .query_engine import RedisVectorIndex
 from .s3_util import s3_upload_dataframe_csv, s3_upload_matplotlib_png
 
@@ -30,6 +30,7 @@ __all__ = [
     "calculate_f_beta_score",
     "calculate_metrics",
     "generate_plots",
+    "plot_cache_hit_ratio",
     "s3_upload_dataframe_csv",
     "s3_upload_matplotlib_png",
     "RedisVectorIndex",

@@ -1,9 +1,12 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 
 from src.customer_analysis.file_handler import FileHandler
 
 
-def generate_plots(results_df, precision_plot_path, metrics_plot_path):
+def generate_plots(
+    results_df: pd.DataFrame, output_dir: str = None, precision_filename: str = None, metrics_filename: str = None
+):
     # Plot 1: Precision vs Cache Hit Ratio
     results_df.plot(
         x="cache_hit_ratio",
@@ -15,8 +18,7 @@ def generate_plots(results_df, precision_plot_path, metrics_plot_path):
         ylabel="Precision",
         xlabel="Cache Hit Ratio",
     )
-    precision_handler = FileHandler(precision_plot_path)
-    precision_handler.save_matplotlib_plot()
+    FileHandler.save_matplotlib_plot(output_dir, precision_filename)
 
     # Plot 2: Metrics over Threshold
     plt.figure()
@@ -26,5 +28,24 @@ def generate_plots(results_df, precision_plot_path, metrics_plot_path):
         results_df["threshold"], results_df["precision"] * results_df["cache_hit_ratio"], label="True Positive Rate"
     )
     plt.legend()
-    metrics_handler = FileHandler(metrics_plot_path)
-    metrics_handler.save_matplotlib_plot()
+    FileHandler.save_matplotlib_plot(output_dir, metrics_filename)
+
+
+def plot_cache_hit_ratio(results_df: pd.DataFrame, output_dir: str = None, filename: str = None):
+    """
+    Plot cache hit ratio vs threshold.
+
+    Args:
+        results_df: DataFrame with threshold and cache_hit_ratio columns
+        output_dir: Directory to save the plot
+        filename: Name of the file to save the plot
+    """
+    plt.figure(figsize=(10, 6))
+    plt.plot(results_df["threshold"], results_df["cache_hit_ratio"], linewidth=2)
+    plt.xlabel("Threshold", fontsize=12)
+    plt.ylabel("Cache Hit Ratio", fontsize=12)
+    plt.title("Cache Hit Ratio vs Threshold", fontsize=14)
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+
+    FileHandler.save_matplotlib_plot(output_dir, filename)

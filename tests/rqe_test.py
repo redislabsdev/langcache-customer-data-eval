@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 import redis
 
-from chr_analysis import run_matching_redis
+from src.customer_analysis import run_matching_redis
 
 
 class DummyArgs:
@@ -53,7 +53,7 @@ def test_run_matching_basic(redis_client):
         assert isinstance(row["best_scores"], float) or row["best_scores"] is None
 
     # Check that the matches make sense: for query[0] about baking bread, expect “how to bake bread”
-    assert out_df['matches'].notnull().any()
+    assert out_df["matches"].notnull().any()
     assert "bread" in out_df.iloc[0]["matches"].lower()
 
 

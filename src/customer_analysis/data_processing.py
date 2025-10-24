@@ -119,13 +119,11 @@ def load_data(query_log_path: str, cache_path: str = None, n_samples: int = 100)
     Load query log and cache from either local paths or S3 URIs.
     """
     # Load the query log
-    query_log_handler = FileHandler(query_log_path)
-    query_log = query_log_handler.read_csv()
+    query_log = FileHandler.read_csv(query_log_path)
 
     # Load cache if provided
     if cache_path:
-        cache_handler = FileHandler(cache_path)
-        cache = cache_handler.read_csv()
+        cache = FileHandler.read_csv(cache_path)
     else:
         cache = None
 

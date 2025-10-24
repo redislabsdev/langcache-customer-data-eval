@@ -5,10 +5,10 @@ import unittest
 import numpy as np
 import pandas as pd
 
-from chr_analysis import (
-    calculate_cache_hit_ratio_for_threshold,
+from src.customer_analysis import (
+    evaluate_threshold_on_results,
     load_data,
-    sweep_cache_hit_ratios,
+    sweep_thresholds_on_results,
 )
 
 
@@ -26,26 +26,26 @@ class TestCacheHitRatioAnalysis(unittest.TestCase):
         scores = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
 
         # At threshold 0.5, we expect 6 scores >= 0.5 (0.5, 0.6, 0.7, 0.8, 0.9, 1.0)
-        chr = calculate_cache_hit_ratio_for_threshold(scores, 0.5)
-        self.assertAlmostEqual(chr, 0.6, places=2)
+        chr = evaluate_threshold_on_results(pd.DataFrame({"similarity_score": scores}), 0.5)
+        self.assertAlmostEqual(chr["cache_hit_ratio"], 0.6, places=2)
 
         # At threshold 0.0, all scores should be cache hits
-        chr = calculate_cache_hit_ratio_for_threshold(scores, 0.0)
-        self.assertAlmostEqual(chr, 1.0, places=2)
+        chr = evaluate_threshold_on_results(pd.DataFrame({"similarity_score": scores}), 0.0)
+        self.assertAlmostEqual(chr["cache_hit_ratio"], 1.0, places=2)
 
         # At threshold 1.0, only score 1.0 should be a cache hit
-        chr = calculate_cache_hit_ratio_for_threshold(scores, 1.0)
-        self.assertAlmostEqual(chr, 0.1, places=2)
+        chr = evaluate_threshold_on_results(pd.DataFrame({"similarity_score": scores}), 1.0)
+        self.assertAlmostEqual(chr["cache_hit_ratio"], 0.1, places=2)
 
         # At threshold > 1.0, no cache hits
-        chr = calculate_cache_hit_ratio_for_threshold(scores, 1.1)
-        self.assertAlmostEqual(chr, 0.0, places=2)
+        chr = evaluate_threshold_on_results(pd.DataFrame({"similarity_score": scores}), 1.1)
+        self.assertAlmostEqual(chr["cache_hit_ratio"], 0.0, places=2)
 
     def test_calculate_cache_hit_ratio_empty_array(self):
         """Test cache hit ratio with empty array."""
         scores = np.array([])
-        chr = calculate_cache_hit_ratio_for_threshold(scores, 0.5)
-        self.assertEqual(chr, 0.0)
+        chr = evaluate_threshold_on_results(pd.DataFrame({"similarity_score": scores}), 0.5)
+        self.assertEqual(chr["cache_hit_ratio"], 0.0)
 
     def test_sweep_cache_hit_ratios(self):
         """Test threshold sweep for cache hit ratios."""
@@ -53,7 +53,7 @@ class TestCacheHitRatioAnalysis(unittest.TestCase):
         scores = np.array([0.1, 0.3, 0.5, 0.7, 0.9])
 
         # Sweep with 5 steps
-        results_df = sweep_cache_hit_ratios(scores, steps=5)
+        results_df = sweep_thresholds_on_results(pd.DataFrame({"similarity_score": scores}))
 
         # Check DataFrame structure
         self.assertIsInstance(results_df, pd.DataFrame)
@@ -76,7 +76,7 @@ class TestCacheHitRatioAnalysis(unittest.TestCase):
         np.random.seed(42)
         scores = np.random.uniform(0, 1, 100)
 
-        results_df = sweep_cache_hit_ratios(scores, steps=50)
+        results_df = sweep_thresholds_on_results(pd.DataFrame({"similarity_score": scores}))
 
         # Cache hit ratio should be monotonically non-increasing
         chr_values = results_df["cache_hit_ratio"].values
@@ -97,18 +97,18 @@ class TestCacheHitRatioAnalysis(unittest.TestCase):
 
         # Load data
         queries, cache = load_data(test_csv_path, n_samples=3)
-        
+
         # Check that queries has correct size
         self.assertEqual(len(queries), 3)
-        
+
         # Check that cache has remaining data (5 total - 3 queries = 2 cache entries)
         self.assertEqual(len(cache), 2)
-        
+
         # Check that queries and cache don't overlap (no common indices)
         query_sentences = set(queries["sentence1"])
         cache_sentences = set(cache["sentence1"])
         self.assertEqual(len(query_sentences.intersection(cache_sentences)), 0)
-        
+
         # Check that all original data is accounted for
         all_original_sentences = set(test_data["sentence1"])
         self.assertEqual(all_original_sentences, query_sentences.union(cache_sentences))
@@ -125,12 +125,12 @@ class TestCacheHitRatioAnalysis(unittest.TestCase):
 
         # Request more samples than available
         queries, cache = load_data(test_csv_path, n_samples=10)
-        
+
         # Should only get 3 (all available) for queries
         self.assertEqual(len(queries), 3)
         # Cache should be empty since all data was used for queries
         self.assertEqual(len(cache), 0)
-        
+
         # All original data should be in queries
         all_original_text = set(test_data["sentence1"])
         all_queries_text = set(queries["sentence1"])
@@ -140,26 +140,26 @@ class TestCacheHitRatioAnalysis(unittest.TestCase):
         """Test edge cases for cache hit ratio calculation."""
         # All same values
         scores = np.array([0.5, 0.5, 0.5, 0.5])
-        chr = calculate_cache_hit_ratio_for_threshold(scores, 0.5)
-        self.assertEqual(chr, 1.0)
+        chr = evaluate_threshold_on_results(pd.DataFrame({"similarity_score": scores}), 0.5)
+        self.assertEqual(chr["cache_hit_ratio"], 1.0)
 
-        chr = calculate_cache_hit_ratio_for_threshold(scores, 0.51)
-        self.assertEqual(chr, 0.0)
+        chr = evaluate_threshold_on_results(pd.DataFrame({"similarity_score": scores}), 0.51)
+        self.assertEqual(chr["cache_hit_ratio"], 0.0)
 
         # Single value
         scores = np.array([0.7])
-        chr = calculate_cache_hit_ratio_for_threshold(scores, 0.7)
-        self.assertEqual(chr, 1.0)
+        chr = evaluate_threshold_on_results(pd.DataFrame({"similarity_score": scores}), 0.7)
+        self.assertEqual(chr["cache_hit_ratio"], 1.0)
 
-        chr = calculate_cache_hit_ratio_for_threshold(scores, 0.8)
-        self.assertEqual(chr, 0.0)
+        chr = evaluate_threshold_on_results(pd.DataFrame({"similarity_score": scores}), 0.8)
+        self.assertEqual(chr["cache_hit_ratio"], 0.0)
 
     def test_sweep_with_uniform_distribution(self):
         """Test sweep with uniformly distributed scores."""
         # Create uniformly distributed scores
         scores = np.linspace(0, 1, 101)  # 101 points from 0 to 1
 
-        results_df = sweep_cache_hit_ratios(scores, steps=11)
+        results_df = sweep_thresholds_on_results(pd.DataFrame({"similarity_score": scores}))
 
         # At threshold 0.0, all should be hits
         self.assertAlmostEqual(results_df.iloc[0]["cache_hit_ratio"], 1.0, places=2)
