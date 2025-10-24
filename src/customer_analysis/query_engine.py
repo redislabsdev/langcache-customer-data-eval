@@ -70,7 +70,7 @@ class RedisVectorIndex:
                     "attrs": {
                         "dims": self.embed_dim,
                         "distance_metric": "COSINE",
-                        "algorithm": "HNSW",
+                        "algorithm": "FLAT",
                         "datatype": "FLOAT32",
                     },
                 },
