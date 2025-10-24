@@ -61,8 +61,12 @@ uv sync
 # Or if you want to include dev dependencies
 uv sync --all-groups
 ```
-
-> **Note:** To install `llm-sim-eval`, you need to `uv add llm-sim-eval` with the correct authentication token from the installation steps in [the Redis artifactory](https://artifactory.dev.redislabs.com/ui/packages/pypi:%2F%2Fllm-sim-eval).
+**Install LLM-as-a-Judge**:
+- Configure `~/.pip/pip.conf`
+    - [Locate the package](https://artifactory.dev.redislabs.com/ui/packages/pypi:%2F%2Fllm-sim-eval/0.2.0)
+    - Set me up (Client: `pip`)
+    - If you want to use `uv`
+        `uv add llm-sim-eval==x.x.x --index=...`
 
 ### 2) Start Redis (Optional but Recommended)
 
