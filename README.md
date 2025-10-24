@@ -1,5 +1,5 @@
 # Customer Evaluation Pipeline
-Evaluate how a semantic cache performs on your dataset by computing the two key KPIs over a threshold sweep and producing plots/CSVs to pick an operating point:
+Evaluate how a semantic cache performs on your dataset by computing the key KPIs over a threshold sweep and producing plots/CSVs to pick an optimal threshold:
 
 - **Cache Hit Ratio (CHR)**: fraction of queries whose similarity_score ≥ τ — i.e., the share served from cache at threshold τ.
 - **Precision**: among those hits, the fraction that are actually correct (truly similar).
@@ -8,9 +8,9 @@ Evaluate how a semantic cache performs on your dataset by computing the two key 
 - **Default (CHR-only)**: Fast cache hit ratio analysis without LLM → threshold sweep and CHR plots
 - **Full mode (`--full`)**: Complete pipeline with LLM-as-a-Judge → precision, recall, F1, and cache hit ratio metrics
 
-Why an LLM? We use an **LLM-as-a-Judge** to produce proxy ground‑truth labels for each `(query, match)` pair, so you can calculate precision without manual annotation.
-
 The pipeline finds nearest matches for each user query using neural embeddings, optionally asks an LLM to judge similarity, computes metrics across score thresholds, and generates plots — with support for **local or S3** inputs/outputs and optional **GPU acceleration**.
+
+Why does the full analysis mode require an LLM? We use an **LLM-as-a-Judge** to produce proxy ground‑truth labels for each `(query, match)` pair, so you can calculate precision without manual annotation.
 
 ## ✨ Features
 
