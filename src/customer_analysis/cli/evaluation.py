@@ -16,7 +16,7 @@ try:
 except ImportError:
     HAS_LLM_SIM_EVAL = False
 
-from src.customer_analysis import (
+from customer_analysis import (
     FileHandler,
     generate_plots,
     load_data,
@@ -71,9 +71,7 @@ def run_chr_analysis(queries: pd.DataFrame, args):
 
     # Sweep cache hit ratios
     similarity_scores = queries["best_scores"].values
-    results_df = sweep_thresholds_on_results(
-        pd.DataFrame({"similarity_score": similarity_scores})
-    )
+    results_df = sweep_thresholds_on_results(pd.DataFrame({"similarity_score": similarity_scores}))
 
     # Save sweep results
     FileHandler.write_csv(results_df, args.output_dir, "chr_sweep.csv")
@@ -169,7 +167,7 @@ def main(args):
     print("\nDone!")
 
 
-if __name__ == "__main__":
+def run():
     parser = argparse.ArgumentParser(
         description="Semantic cache evaluation: CHR-only (default) or full evaluation with LLM-as-a-Judge (--full)"
     )
@@ -228,3 +226,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     main(args)
+
+
+if __name__ == "__main__":
+    run()

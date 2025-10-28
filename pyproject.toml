@@ -21,17 +21,14 @@ dependencies = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.hatch.build.targets.wheel]
-only-include = [
-    "evaluation.py",
-    "plot_precision_vs_cache_hit_ratio.py",
-]
-
 [dependency-groups]
 dev = [
     "black>=25.1.0",
     "isort>=6.0.1",
     "pylint>=3.3.7",
+]
+llm-sim-eval = [
+    "llm-sim-eval>=0.2.0",
 ]
 
 [tool.black]
@@ -44,3 +41,6 @@ line_length = 120
 
 [tool.pylint]
 max-line-length = 120
+
+[project.scripts]
+langcache-eval = "customer_analysis.cli.evaluation:run"
