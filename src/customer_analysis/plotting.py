@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from src.customer_analysis.file_handler import FileHandler
+from customer_analysis.file_handler import FileHandler
 
 
 def generate_plots(
