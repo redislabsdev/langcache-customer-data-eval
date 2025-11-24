@@ -58,7 +58,7 @@ def crawl_results(base_dir):
 
 
 def main():
-    parser = argparse.ArgumentParser("Usage: python plot_similarity_distribution.py --base_dir <base_dir>")
+    parser = argparse.ArgumentParser("Usage: python plot_multiple_similarity_distribution.py --base_dir <base_dir>")
     parser.add_argument("--base_dir", type=str, required=False, default="complete_benchmark_results")
     args = parser.parse_args()
 

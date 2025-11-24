@@ -1,8 +1,6 @@
 import argparse
-import json
 import os
 import re
-import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -60,7 +58,7 @@ def crawl_results(base_dir):
 
 
 def main():
-    parser = argparse.ArgumentParser("Usage: python plot_precision_vs_cache_hit_ratio.py --base_dir <base_dir>")
+    parser = argparse.ArgumentParser("Usage: python plot_multiple_precision_vs_cache_hit_ratio.py --base_dir <base_dir>")
     parser.add_argument("--base_dir", type=str, default="complete_benchmark_results")
     args = parser.parse_args()
     base_dir = args.base_dir

@@ -1,16 +1,12 @@
 import argparse
-import glob
 import os
 
 # Import logic from evaluation.py
 # We need to make sure we can import these.
 # Assuming evaluation.py is in the same directory or we add it to path.
 import sys
-import time
-from copy import deepcopy
 from datetime import datetime
 
-import numpy as np
 import pandas as pd
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -24,7 +20,7 @@ try:
 except ImportError:
     HAS_LLM_SIM_EVAL_LIB = False
 
-from evaluation import FileHandler, run_chr_analysis, run_full_evaluation, run_matching, run_matching_redis
+from evaluation import run_chr_analysis, run_full_evaluation, run_matching, run_matching_redis
 
 
 # Mock args object to pass to evaluation functions
@@ -82,7 +78,7 @@ def main():
         )
 
     # Find all CSV datasets
-    dataset_files = [args.dataset_dir + "/" + dataset_name for dataset_name in args.dataset_names]
+    dataset_files = [os.path.join(args.dataset_dir, dataset_name) for dataset_name in args.dataset_names]
     if not dataset_files:
         print(f"No CSV files found in {args.dataset_dir}")
         return
