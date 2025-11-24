@@ -14,10 +14,9 @@ def main():
     args = parser.parse_args()
 
     csv_paths = {
-        "v1": "rado_synthetic/v1/",
-        "v2": "rado_synthetic/v2/",
-        "v3": "rado_synthetic/v3/",
-        "v3.1": "rado_synthetic/v3.1/",
+        "v1": "vizio/v1/customer_analysis/langcache-v1/",
+        "v3": "vizio/v1/customer_analysis/langcache-v3/",
+        "MiniLM": "vizio/v1/customer_analysis/langcache-minilm/",
     }
 
     n = len(csv_paths)
@@ -34,7 +33,7 @@ def main():
         row = idx // cols
         col = idx % cols
 
-        df = pd.read_csv(csv_path + "llm_as_a_judge_results.csv")
+        df = pd.read_csv(csv_path + "classification_results_optimal_details.csv")
         df = df.iloc[:-1]
 
         # Extract scores

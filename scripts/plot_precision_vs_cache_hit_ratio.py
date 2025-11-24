@@ -18,10 +18,9 @@ def main():
     os.makedirs(args.output_dir, exist_ok=True)
 
     csv_paths = {
-        "v1": "rado_synthetic/v1/threshold_sweep_results.csv",
-        "v2": "rado_synthetic/v2/threshold_sweep_results.csv",
-        "v3": "rado_synthetic/v3/threshold_sweep_results.csv",
-        "v3.1": "rado_synthetic/v3.1/threshold_sweep_results.csv",
+        "v1": "vizio/v1/customer_analysis/langcache-v1/threshold_sweep_results.csv",
+        "v3": "vizio/v1/customer_analysis/langcache-v3/threshold_sweep_results.csv",
+        "MiniLM": "vizio/v1/customer_analysis/langcache-minilm/threshold_sweep_results.csv",
     }
 
     fig, ax = plt.subplots(figsize=(16, 7), ncols=2)
