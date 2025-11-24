@@ -35,6 +35,7 @@ def main():
         elif n == 0:
             continue
         fig, axes = plt.subplots(rows, cols, figsize=(22, 6 * rows))
+        fig.suptitle(f"Similarity Distributions for {dataset_name}", fontsize=24)
         if rows == 1 and cols == 1:
             axes = np.array([[axes]])
         elif rows == 1:
@@ -112,7 +113,7 @@ def main():
                 print(f"Error plotting {model_name}: {e}")
         for idx in range(len(model_data), len(axes_flat)):
             axes_flat[idx].axis("off")
-        plt.tight_layout()
+        plt.tight_layout(rect=[0, 0, 1, 0.96])
         output_path = os.path.join(dataset_full_path, "similarity_distributions.png")
         print(f"Saving plot to {output_path}")
         plt.savefig(output_path, dpi=300, bbox_inches="tight")
