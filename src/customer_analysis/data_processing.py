@@ -1,9 +1,9 @@
 import pandas as pd
 import torch
 
-from src.customer_analysis.embedding_interface import NeuralEmbedding
-from src.customer_analysis.file_handler import FileHandler
-from src.customer_analysis.query_engine import RedisVectorIndex
+from customer_analysis.embedding_interface import NeuralEmbedding
+from customer_analysis.file_handler import FileHandler
+from customer_analysis.query_engine import RedisVectorIndex
 
 RANDOM_SEED = 42
 
