@@ -35,7 +35,6 @@ def main():
         col = idx % cols
 
         df = pd.read_csv(csv_path + "llm_as_a_judge_results.csv")
-        df = df.iloc[:-1]
 
         # Extract scores
         pos = df[df["actual_label"] == 1]["similarity_score"].values
