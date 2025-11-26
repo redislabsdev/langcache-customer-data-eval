@@ -31,6 +31,8 @@ def main():
     if os.path.exists(first_csv):
         df_ref = pd.read_csv(first_csv)
         row = df_ref.iloc[0]
+        # Remove the last row because it's it's always precision = 1.0
+        df = df.iloc[:-1]
         total_pos = row['tp'] + row['fn']
         total_neg = row['fp'] + row['tn']
         total = total_pos + total_neg

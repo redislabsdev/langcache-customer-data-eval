@@ -81,6 +81,7 @@ def main():
 
                 try:
                     df = pd.read_csv(csv_path)
+                    # Remove the last row because it's it's always precision = 1.0
                     df = df.iloc[:-1]
 
                     x_chr = df["cache_hit_ratio"].values
