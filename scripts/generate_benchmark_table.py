@@ -7,47 +7,40 @@ from utils import crawl_results
 
 
 def calculate_pchr_auc(csv_path):
-    try:
-        df = pd.read_csv(csv_path)
-        df = df.iloc[:-1]
+    df = pd.read_csv(csv_path)
+    df = df.iloc[:-1]
 
-        if "cache_hit_ratio" not in df.columns or "precision" not in df.columns:
-            return None
-
-        x = df["cache_hit_ratio"].values
-        y = df["precision"].values
-
-        sorted_idx = np.argsort(x)
-        x = x[sorted_idx]
-        y = y[sorted_idx]
-
-        auc = np.trapezoid(y, x)
-        return auc
-    except Exception as e:
+    if "cache_hit_ratio" not in df.columns or "precision" not in df.columns:
         return None
+
+    x = df["cache_hit_ratio"].values
+    y = df["precision"].values
+
+    sorted_idx = np.argsort(x)
+    x = x[sorted_idx]
+    y = y[sorted_idx]
+
+    auc = np.trapezoid(y, x)
+    return auc
 
 
 def calculate_overlap(csv_path):
-    try:
-        df = pd.read_csv(csv_path)
-        df = df.iloc[:-1]
+    df = pd.read_csv(csv_path)
 
-        if "actual_label" not in df.columns or "similarity_score" not in df.columns:
-            return None
-        pos = df[df["actual_label"] == 1]["similarity_score"].values
-        neg = df[df["actual_label"] == 0]["similarity_score"].values
-        if len(pos) == 0 or len(neg) == 0:
-            return None
-        lo = 0
-        hi = 1
-        edges = np.linspace(lo, hi, 101)
-        pos_hist, _ = np.histogram(pos, bins=edges, density=True)
-        neg_hist, _ = np.histogram(neg, bins=edges, density=True)
-        widths = np.diff(edges)
-        overlap = np.sum(np.minimum(pos_hist, neg_hist) * widths)
-        return overlap
-    except Exception as e:
+    if "actual_label" not in df.columns or "similarity_score" not in df.columns:
         return None
+    pos = df[df["actual_label"] == 1]["similarity_score"].values
+    neg = df[df["actual_label"] == 0]["similarity_score"].values
+    if len(pos) == 0 or len(neg) == 0:
+        return None
+    lo = 0
+    hi = 1
+    edges = np.linspace(lo, hi, 101)
+    pos_hist, _ = np.histogram(pos, bins=edges, density=True)
+    neg_hist, _ = np.histogram(neg, bins=edges, density=True)
+    widths = np.diff(edges)
+    overlap = np.sum(np.minimum(pos_hist, neg_hist) * widths)
+    return overlap
 
 
 def get_model_short_name(model_name):

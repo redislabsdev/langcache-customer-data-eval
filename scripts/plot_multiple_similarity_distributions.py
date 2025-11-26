@@ -69,7 +69,6 @@ def main():
 
                     try:
                         df = pd.read_csv(details_path)
-                        df = df.iloc[:-1]
                         pos = df[df["actual_label"] == 1]["similarity_score"].values
                         neg = df[df["actual_label"] == 0]["similarity_score"].values
 
