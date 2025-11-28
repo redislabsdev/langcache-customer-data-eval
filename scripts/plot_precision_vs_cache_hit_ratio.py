@@ -18,16 +18,49 @@ def main():
     os.makedirs(args.output_dir, exist_ok=True)
 
     csv_paths = {
-        "v1": "vizio/v1/customer_analysis/langcache-v1/threshold_sweep_results.csv",
-        "v3": "vizio/v1/customer_analysis/langcache-v3/threshold_sweep_results.csv",
-        "MiniLM": "vizio/v1/customer_analysis/langcache-minilm/threshold_sweep_results.csv",
+        "v1": "rado_synthetic/v1/threshold_sweep_results.csv",
+        "v2": "rado_synthetic/v2/threshold_sweep_results.csv",
+        "v3": "rado_synthetic/v3/threshold_sweep_results.csv",
+        "v3.1": "rado_synthetic/v3.1/threshold_sweep_results.csv",
     }
 
     fig, ax = plt.subplots(figsize=(16, 7), ncols=2)
 
+    # Get constants from the first dataframe (assuming all runs use same dataset)
+    first_csv = list(csv_paths.values())[0]
+    if os.path.exists(first_csv):
+        df_ref = pd.read_csv(first_csv)
+        row = df_ref.iloc[0]
+        # Remove the last row because it's it's always precision = 1.0
+        df = df.iloc[:-1]
+        total_pos = row['tp'] + row['fn']
+        total_neg = row['fp'] + row['tn']
+        total = total_pos + total_neg
+        base_rate = total_pos / total
+
+        # Theoretical Perfect (Uniform Negatives)
+        # Curve: y = 1 for x <= base_rate; y = base_rate/x for x > base_rate
+        x_uniform = np.linspace(base_rate, 1.0, 100)
+        y_uniform = base_rate / x_uniform
+        # Add the initial flat part
+        x_uniform = np.concatenate(([0], x_uniform))
+        y_uniform = np.concatenate(([1], y_uniform))
+        
+        auc_uniform = base_rate * (1 - np.log(base_rate))
+        
+        ax[0].plot(x_uniform, y_uniform, '--', color='black', label=f"Perfect (Uniform Negs), AUC: {auc_uniform:.3f}")
+
+        # Theoretical Perfect (Zero Negatives)
+        # Curve: (0,1) -> (base_rate, 1) -> (1, base_rate)
+        x_zeros = [0, base_rate, 1.0]
+        y_zeros = [1.0, 1.0, base_rate]
+        
+        auc_zeros = base_rate + 0.5 * (1 - base_rate**2)
+        
+        ax[0].plot(x_zeros, y_zeros, ':', color='black', label=f"Perfect (Zero Negs), AUC: {auc_zeros:.3f}")
+
     for run_name, csv_path in csv_paths.items():
         df = pd.read_csv(csv_path)
-        df = df.iloc[:-1]
         x = df["cache_hit_ratio"].values
         x2 = df["recall"].values
         y = df["precision"].values
