@@ -18,7 +18,7 @@ try:
 except ImportError:
     HAS_LLM_SIM_EVAL = False
 
-from src.customer_analysis import (
+from customer_analysis import (
     FileHandler,
     generate_plots,
     load_data,
@@ -197,7 +197,7 @@ def main(args):
     print("\nDone!")
 
 
-if __name__ == "__main__":
+def run():
     parser = argparse.ArgumentParser(
         description="Semantic cache evaluation: CHR-only (default) or full evaluation with LLM-as-a-Judge (--full)"
     )
@@ -256,3 +256,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     main(args)
+
+
+if __name__ == "__main__":
+    run()

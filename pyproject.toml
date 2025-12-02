@@ -38,6 +38,9 @@ dev = [
     "isort>=6.0.1",
     "pylint>=3.3.7",
 ]
+llm-sim-eval = [
+    "llm-sim-eval>=0.2.0",
+]
 
 [tool.black]
 line-length = 120
@@ -49,3 +52,6 @@ line_length = 120
 
 [tool.pylint]
 max-line-length = 120
+
+[project.scripts]
+langcache-eval = "customer_analysis.cli.evaluation:run"
