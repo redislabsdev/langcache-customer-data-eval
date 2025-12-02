@@ -379,7 +379,6 @@ class TestE2EEvaluation(unittest.TestCase):
         assert len(queries) == 3, f"Expected 3 queries, got {len(queries)}"
         assert len(cache) == 7, f"Expected 4 cache entries, got {len(cache)}"
 
-
         # Test 2: n_samples > total rows
         queries_all, cache_all = load_data(query_log_path=QUERIES_PATH, cache_path=CACHE_PATH, n_samples=100)
 
@@ -398,9 +397,7 @@ class TestE2EEvaluation(unittest.TestCase):
         print(f"✓ Edge case n_samples=1: 1 query, {len(cache_one)} cache entries")
 
         # Test 4: Loading with explicit cache file
-        queries_exp, cache_exp = load_data(
-            query_log_path=QUERIES_PATH, cache_path=CACHE_PATH, n_samples=3
-        )
+        queries_exp, cache_exp = load_data(query_log_path=QUERIES_PATH, cache_path=CACHE_PATH, n_samples=3)
 
         # Test 5: Loading with no cache file
         queries_no, cache_no = load_data(query_log_path=QUERIES_PATH, cache_path=None, n_samples=3)
@@ -585,4 +582,3 @@ class TestE2EEvaluation(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
-

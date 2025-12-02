@@ -9,7 +9,9 @@ import torch
 
 # Conditional import for LLM-as-a-Judge functionality
 try:
-    from llm_sim_eval.pipeline import run_llm_local_sim_prediction_pipeline
+    from llm_sim_eval.data import SentencePairsDataset
+    from llm_sim_eval.llm_inference import LLMInference
+    from llm_sim_eval.pipeline import PipelineResult, run_llm_local_sim_prediction_pipeline
     from llm_sim_eval.prompts import DEFAULT_PROMPTS, Prompt
 
     HAS_LLM_SIM_EVAL = True
@@ -35,15 +37,43 @@ np.random.seed(RANDOM_SEED)
 torch.manual_seed(RANDOM_SEED)
 
 
+def run_pipeline_with_existing_model(llm_model, sentence_pairs, batch_size, prompt):
+    predictor = LLMInference(
+        llm_model,
+        prompt=prompt,
+        preprocessor=lambda x, y: y,
+        postprocessor=lambda x, y: x,
+    )
+    dataset = SentencePairsDataset(sentence_pairs)
+    dataloader = dataset.get_dataloader(batch_size)
+    flat_responses, failed_responses = predictor.predict(dataloader)
+
+    return PipelineResult(
+        sentence_pairs=sentence_pairs,
+        flat_responses=flat_responses,
+        failed_responses=failed_responses,
+    )
+
+
 def run_llm_as_a_judge(query_pairs, args):
     """Run LLM-as-a-Judge evaluation on query pairs."""
     prompt = Prompt.load(DEFAULT_PROMPTS["empty_prompt"].path)
-    result = run_llm_local_sim_prediction_pipeline(
-        llm=args.llm_name,
-        sentence_pairs=query_pairs,
-        batch_size=2,
-        prompt=prompt,
-    )
+
+    if hasattr(args, "llm_model") and args.llm_model is not None:
+        result = run_pipeline_with_existing_model(
+            llm_model=args.llm_model,
+            sentence_pairs=query_pairs,
+            batch_size=1,
+            prompt=prompt,
+        )
+    else:
+        result = run_llm_local_sim_prediction_pipeline(
+            llm=args.llm_name,
+            sentence_pairs=query_pairs,
+            batch_size=1,
+            prompt=prompt,
+        )
+    torch.cuda.empty_cache()
 
     n_failed = len(result.failed_responses)
 

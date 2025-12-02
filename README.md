@@ -1,16 +1,9 @@
 # Customer Evaluation Pipeline
-Evaluate how a semantic cache performs on your dataset by computing the two key KPIs over a threshold sweep and producing plots/CSVs to pick an operating point:
+Evaluate how a semantic cache performs on your dataset by computing key KPIs over a threshold sweep and producing plots/CSVs:
 
-- **Cache Hit Ratio (CHR)**: fraction of queries whose similarity_score ≥ τ — i.e., the share served from cache at threshold τ.
-- **Precision**: among those hits, the fraction that are actually correct (truly similar).
+The pipeline finds nearest matches for each user query using text embeddings, optionally asks an LLM to judge similarity, computes metrics across score thresholds, and generates plots — with support for **local or S3** inputs/outputs and optional **GPU acceleration**.
 
-**One unified script with two modes:**
-- **Default (CHR-only)**: Fast cache hit ratio analysis without LLM → threshold sweep and CHR plots
-- **Full mode (`--full`)**: Complete pipeline with LLM-as-a-Judge → precision, recall, F1, and cache hit ratio metrics
-
-Why an LLM? We use an **LLM-as-a-Judge** to produce proxy ground‑truth labels for each `(query, match)` pair, so you can calculate precision without manual annotation.
-
-The pipeline finds nearest matches for each user query using neural embeddings, optionally asks an LLM to judge similarity, computes metrics across score thresholds, and generates plots — with support for **local or S3** inputs/outputs and optional **GPU acceleration**.
+> Why does the full analysis mode require an LLM? We use an **LLM-as-a-Judge** to produce proxy ground‑truth labels for each `(query, match)` pair, so you can calculate precision without manual annotation.
 
 ## ✨ Features
 
@@ -61,8 +54,12 @@ uv sync
 # Or if you want to include dev dependencies
 uv sync --all-groups
 ```
-
-> **Note:** To install `llm-sim-eval`, you need to `uv add llm-sim-eval` with the correct authentication token from the installation steps in [the Redis artifactory](https://artifactory.dev.redislabs.com/ui/packages/pypi:%2F%2Fllm-sim-eval).
+**Install LLM-as-a-Judge**:
+- Configure `~/.pip/pip.conf`
+    - [Locate the package](https://artifactory.dev.redislabs.com/ui/packages/pypi:%2F%2Fllm-sim-eval/0.2.0)
+    - Set me up (Client: `pip`)
+    - If you want to use `uv`
+        `uv add llm-sim-eval==x.x.x --index=...`
 
 ### 2) Start Redis (Optional but Recommended)
 
