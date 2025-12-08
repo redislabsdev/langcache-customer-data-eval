@@ -26,7 +26,9 @@ def main():
         dataset_full_path = os.path.join(base_dir, dataset_name)
         if not os.path.exists(dataset_full_path):
             continue
-        fig, ax = plt.subplots(figsize=(10, 7))
+        
+        # CHANGED: Create two subplots: one for curves, one for the AUC bar chart
+        fig, (ax_main, ax_bar) = plt.subplots(1, 2, figsize=(18, 8), gridspec_kw={'width_ratios': [2, 1]})
         colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 
         # Get base rate from first valid run to compute theoretical curves
@@ -48,6 +50,9 @@ def main():
             if base_rate is not None:
                 break
 
+        # Theoretical AUCs storage
+        theory_aucs = {}
+
         # Plot theoretical curves
         if base_rate is not None:
             # Theoretical Perfect (Uniform Negatives)
@@ -56,15 +61,21 @@ def main():
             x_uniform = np.concatenate(([0], x_uniform))
             y_uniform = np.concatenate(([1], y_uniform))
             auc_uniform = base_rate * (1 - np.log(base_rate))
-            ax.plot(x_uniform, y_uniform, '--', color='black', label=f"Perfect (Uniform Negs), AUC: {auc_uniform:.3f}")
+            ax_main.plot(x_uniform, y_uniform, '--', color='black', label=f"Perfect (Uniform Negs), AUC: {auc_uniform:.3f}")
+            theory_aucs['Uniform'] = auc_uniform
 
             # Theoretical Perfect (Zero Negatives)
             x_zeros = [0, base_rate, 1.0]
             y_zeros = [1.0, 1.0, base_rate]
             auc_zeros = base_rate + 0.5 * (1 - base_rate**2)
-            ax.plot(x_zeros, y_zeros, ':', color='black', label=f"Perfect (Zero Negs), AUC: {auc_zeros:.3f}")
+            ax_main.plot(x_zeros, y_zeros, ':', color='black', label=f"Perfect (Zero Negs), AUC: {auc_zeros:.3f}")
+            theory_aucs['ZeroNegs'] = auc_zeros
 
         sorted_models = sorted(model_data.keys())
+        
+        # Store data for the bar plot
+        auc_records = []
+
         for i, model_name in enumerate(sorted_models):
             run_paths = model_data[model_name]
             precisions_interp = []
@@ -81,7 +92,7 @@ def main():
 
                 try:
                     df = pd.read_csv(csv_path)
-                    # Remove the last row because it's it's always precision = 1.0
+                    # Remove the last row because it's always precision = 1.0
                     df = df.iloc[:-1]
 
                     x_chr = df["cache_hit_ratio"].values
@@ -95,7 +106,13 @@ def main():
 
                     p_interp = np.interp(common_chr, x_chr, y_prec)
                     precisions_interp.append(p_interp)
-                    aucs_pchr.append(np.trapezoid(p_interp, common_chr))
+                    # Use numpy.trapezoid (NumPy 2.0) or numpy.trapz (older)
+                    try:
+                        auc_val = np.trapezoid(p_interp, common_chr)
+                    except AttributeError:
+                        auc_val = np.trapz(p_interp, common_chr)
+                    
+                    aucs_pchr.append(auc_val)
 
                     valid_runs += 1
                 except Exception as e:
@@ -111,15 +128,53 @@ def main():
 
             color = colors[i % len(colors)]
 
-            label_chr = f"{model_name}, AUC: {mean_auc_pchr:.3f} ± {std_auc_pchr:.3f}"
-            ax.plot(common_chr, mean_p_chr, label=label_chr, color=color)
+            label_chr = f"{model_name}, AUC: {mean_auc_pchr:.3f} ± {std_auc_pchr:.3f}" # Simplified label for main plot, AUC is in bar chart
+            ax_main.plot(common_chr, mean_p_chr, label=label_chr, color=color)
             if valid_runs > 1:
-                ax.fill_between(common_chr, mean_p_chr - std_p_chr, mean_p_chr + std_p_chr, color=color, alpha=0.2)
-        ax.set_xlabel("Cache Hit Ratio")
-        ax.set_ylabel("Precision")
-        ax.set_title("Precision vs Cache Hit Ratio")
-        ax.grid(True)
-        ax.legend()
+                ax_main.fill_between(common_chr, mean_p_chr - std_p_chr, mean_p_chr + std_p_chr, color=color, alpha=0.2)
+            
+            # Save data for bar chart
+            auc_records.append({
+                'name': model_name,
+                'mean': mean_auc_pchr,
+                'std': std_auc_pchr,
+                'color': color
+            })
+
+        # --- Configure Main Curve Plot ---
+        ax_main.set_xlabel("Cache Hit Ratio")
+        ax_main.set_ylabel("Precision")
+        ax_main.set_title("Precision vs Cache Hit Ratio")
+        ax_main.grid(True)
+        ax_main.legend()
+
+        # --- Configure Bar Chart ---
+        if auc_records:
+            # Sort by mean AUC (ascending so best is at top)
+            auc_records.sort(key=lambda x: x['mean'], reverse=False)
+            
+            names = [r['name'] for r in auc_records]
+            means = [r['mean'] for r in auc_records]
+            stds = [r['std'] for r in auc_records]
+            bar_colors = [r['color'] for r in auc_records]
+            y_pos = np.arange(len(names))
+
+            ax_bar.barh(y_pos, means, xerr=stds, color=bar_colors, align='center', capsize=5, alpha=0.8)
+            ax_bar.set_yticks(y_pos)
+            ax_bar.set_yticklabels(names)
+            ax_bar.set_xlabel("AUC")
+            ax_bar.set_title("AUC Comparison")
+            ax_bar.grid(axis='x', linestyle='--', alpha=0.7)
+
+            # Add theoretical lines to bar chart
+            if 'Uniform' in theory_aucs:
+                ax_bar.axvline(theory_aucs['Uniform'], color='black', linestyle='--', alpha=0.7)
+            if 'ZeroNegs' in theory_aucs:
+                ax_bar.axvline(theory_aucs['ZeroNegs'], color='black', linestyle=':', alpha=0.7)
+            
+            # Set x-limits to focus on relevant area if needed, or 0-1
+            # ax_bar.set_xlim(0, 1.05) 
+
         fig.suptitle(f"Performance on {dataset_name.split('_')[0]}")
         plt.tight_layout()
         output_path = os.path.join(dataset_full_path, "precision_vs_cache_hit_ratio.png")

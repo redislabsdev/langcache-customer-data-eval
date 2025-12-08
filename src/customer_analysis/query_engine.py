@@ -56,8 +56,12 @@ class RedisVectorIndex:
     def __post_init__(self):
         # 0) init local embedding model
         device = self.device or ("cuda" if _HAS_TORCH and torch.cuda.is_available() else "cpu")
-        self.model = SentenceTransformer(self.model_name, device=device)
-        self.embed_dim = int(self.model.get_sentence_embedding_dimension())
+        self.model = SentenceTransformer(self.model_name, device=device, local_files_only=False, trust_remote_code=True)
+        
+        # Probe the model to get the actual output dimension
+        # (Some models report incorrect dimension in config)
+        probe = self.model.encode(["test"], convert_to_numpy=True)
+        self.embed_dim = int(probe.shape[1])
 
         # 1) ensure Redis index exists (schema dims come from the model)
         schema_dict = {
@@ -79,8 +83,8 @@ class RedisVectorIndex:
         }
         schema = IndexSchema.from_dict(schema_dict)
         self.index: SearchIndex = SearchIndex(schema, redis_url=self.redis_url)
-        if not self.index.exists():
-            self.index.create(overwrite=False)
+        # Always overwrite to ensure schema matches the current model dimensions
+        self.index.create(overwrite=True)
 
     def _embed_batch(self, texts: List[str]) -> np.ndarray:
         vecs = self.model.encode(
