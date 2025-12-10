@@ -98,7 +98,7 @@ def run_matching_redis(queries: pd.DataFrame, cache: pd.DataFrame, args):
                 
             if all_pairs:
                 print(f"Reranking {len(all_pairs)} pairs with Cross-Encoder...")
-                all_scores = cross_encoder.predict(all_pairs, batch_size=128, show_progress_bar=True)
+                all_scores = cross_encoder.predict(all_pairs, batch_size=32, show_progress_bar=True)
                 
                 # Reassemble
                 score_idx = 0

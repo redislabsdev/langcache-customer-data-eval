@@ -1,10 +1,99 @@
 import argparse
 import os
+from collections import defaultdict
 
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 import numpy as np
 import pandas as pd
 from utils import crawl_results
+
+
+def extract_retriever_name(model_name):
+    """Extract retriever name from model name (part before '_rerank_')."""
+    if '_rerank_' in model_name:
+        return model_name.split('_rerank_')[0]
+    return model_name
+
+
+def extract_reranker_name(model_name):
+    """Extract reranker name from model name (part after '_rerank_'), or None if no reranker."""
+    if '_rerank_' in model_name:
+        return model_name.split('_rerank_')[1]
+    return None
+
+
+def darken_color(color, factor):
+    """
+    Darken a color by a given factor (0 = original, 1 = black).
+    factor should be between 0 and 1.
+    """
+    rgb = mcolors.to_rgb(color)
+    darkened = tuple(c * (1 - factor) for c in rgb)
+    return darkened
+
+
+def get_retriever_color_map(model_names):
+    """
+    Create a color mapping for retrievers and their cross-encoder variants.
+    Returns: dict mapping model_name -> color
+    """
+    # Group models by retriever
+    retriever_groups = defaultdict(list)
+    for model_name in model_names:
+        retriever = extract_retriever_name(model_name)
+        retriever_groups[retriever].append(model_name)
+    
+    # Sort retrievers for consistent ordering
+    sorted_retrievers = sorted(retriever_groups.keys())
+    
+    # Use a colorful palette with good distinction
+    base_colors = [
+        '#e6194B',  # Red
+        '#3cb44b',  # Green  
+        '#4363d8',  # Blue
+        '#f58231',  # Orange
+        '#911eb4',  # Purple
+        '#42d4f4',  # Cyan
+        '#f032e6',  # Magenta
+        '#bfef45',  # Lime
+        '#fabed4',  # Pink
+        '#469990',  # Teal
+        '#dcbeff',  # Lavender
+        '#9A6324',  # Brown
+        '#fffac8',  # Beige
+        '#800000',  # Maroon
+        '#aaffc3',  # Mint
+    ]
+    
+    color_map = {}
+    
+    for i, retriever in enumerate(sorted_retrievers):
+        base_color = base_colors[i % len(base_colors)]
+        models_in_group = retriever_groups[retriever]
+        
+        # Sort models within group: base retriever first, then rerankers alphabetically
+        def sort_key(m):
+            reranker = extract_reranker_name(m)
+            if reranker is None:
+                return (0, '')  # Base retriever comes first
+            return (1, reranker)
+        
+        models_in_group.sort(key=sort_key)
+        
+        # Assign colors with increasing darkness
+        n_models = len(models_in_group)
+        for j, model_name in enumerate(models_in_group):
+            if n_models == 1:
+                # Only base retriever, use base color
+                color_map[model_name] = base_color
+            else:
+                # Darken progressively: base is brightest, last reranker is darkest
+                # factor ranges from 0 (base) to ~0.6 (darkest reranker)
+                darken_factor = j * 0.5 / (n_models - 1) if n_models > 1 else 0
+                color_map[model_name] = darken_color(base_color, darken_factor)
+    
+    return color_map, sorted_retrievers
 
 
 def main():
@@ -28,8 +117,11 @@ def main():
             continue
         
         # CHANGED: Create two subplots: one for curves, one for the AUC bar chart
-        fig, (ax_main, ax_bar) = plt.subplots(1, 2, figsize=(18, 8), gridspec_kw={'width_ratios': [2, 1]})
-        colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+        fig, (ax_main, ax_bar) = plt.subplots(1, 2, figsize=(30, 12), gridspec_kw={'width_ratios': [2, 1]})
+        
+        # Build color map based on retriever grouping
+        all_model_names = list(model_data.keys())
+        color_map, sorted_retrievers = get_retriever_color_map(all_model_names)
 
         # Get base rate from first valid run to compute theoretical curves
         base_rate = None
@@ -71,12 +163,20 @@ def main():
             ax_main.plot(x_zeros, y_zeros, ':', color='black', label=f"Perfect (Zero Negs), AUC: {auc_zeros:.3f}")
             theory_aucs['ZeroNegs'] = auc_zeros
 
-        sorted_models = sorted(model_data.keys())
+        # Sort models by retriever group, then by reranker
+        def model_sort_key(m):
+            retriever = extract_retriever_name(m)
+            reranker = extract_reranker_name(m)
+            if reranker is None:
+                return (retriever, 0, '')
+            return (retriever, 1, reranker)
+        
+        sorted_models = sorted(model_data.keys(), key=model_sort_key)
         
         # Store data for the bar plot
         auc_records = []
 
-        for i, model_name in enumerate(sorted_models):
+        for model_name in sorted_models:
             run_paths = model_data[model_name]
             precisions_interp = []
             aucs_pchr = []
@@ -126,9 +226,10 @@ def main():
             mean_auc_pchr = np.mean(aucs_pchr)
             std_auc_pchr = np.std(aucs_pchr) if valid_runs > 1 else 0.0
 
-            color = colors[i % len(colors)]
+            # Get color from the retriever-based color map
+            color = color_map[model_name]
 
-            label_chr = f"{model_name}, AUC: {mean_auc_pchr:.3f} ± {std_auc_pchr:.3f}" # Simplified label for main plot, AUC is in bar chart
+            label_chr = f"{model_name}, AUC: {mean_auc_pchr:.3f} ± {std_auc_pchr:.3f}"
             ax_main.plot(common_chr, mean_p_chr, label=label_chr, color=color)
             if valid_runs > 1:
                 ax_main.fill_between(common_chr, mean_p_chr - std_p_chr, mean_p_chr + std_p_chr, color=color, alpha=0.2)
@@ -138,7 +239,8 @@ def main():
                 'name': model_name,
                 'mean': mean_auc_pchr,
                 'std': std_auc_pchr,
-                'color': color
+                'color': color,
+                'retriever': extract_retriever_name(model_name)
             })
 
         # --- Configure Main Curve Plot ---
