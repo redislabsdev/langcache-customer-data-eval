@@ -1,44 +1,100 @@
 uv run evaluation.py \
-  --query_log_path ./dataset/queries.csv \
-  --cache_path ./dataset/cache.csv \
-  --sentence_column text \
-  --output_dir ./outputs \
-  --n_samples 100 \
-  --model_name "redis/langcache-embed-v3.1"
+  --query_log_path dataset/mangoes_unique_sentences.csv \
+  --sentence_column sentence \
+  --output_dir ./mangoes/v2 \
+  --n_samples 1000 \
+  --model_name "redis/langcache-embed-v2" \
+  --full \
 
 uv run evaluation.py \
-  --query_log_path ./dataset/queries.csv \
-  --cache_path ./dataset/cache.csv \
-  --sentence_column text \
-  --output_dir ./outputs \
-  --n_samples 100 \
-  --model_name "redis/langcache-embed-v3.1" \
-  --use_redis
+  --query_log_path dataset/mangoes_unique_sentences.csv \
+  --sentence_column sentence \
+  --output_dir ./mangoes/v3 \
+  --n_samples 1000 \
+  --model_name "redis/langcache-embed-v3" \
+  --full \
 
 uv run evaluation.py \
-  --query_log_path ./dataset/queries.csv \
-  --cache_path ./dataset/cache.csv \
-  --sentence_column text \
-  --output_dir ./outputs \
-  --n_samples 100 \
-  --model_name "redis/langcache-embed-v3.1" \
-  --full
-
-uv run evaluation.py \
-  --query_log_path ./dataset/queries.csv \
-  --cache_path ./dataset/cache.csv \
-  --sentence_column text \
-  --output_dir ./outputs \
-  --n_samples 100 \
+  --query_log_path dataset/mangoes_unique_sentences.csv \
+  --sentence_column sentence \
+  --output_dir ./mangoes/v3.1 \
+  --n_samples 1000 \
   --model_name "redis/langcache-embed-v3.1" \
   --full \
-  --use_redis
 
 uv run evaluation.py \
-  --query_log_path ./dataset/chatgpt.csv \
-  --sentence_column sentence2 \
-  --output_dir ./outputs \
-  --n_samples 20 \
+  --query_log_path dataset/mangoes_unique_sentences.csv \
+  --sentence_column sentence \
+  --output_dir ./mangoes/v1 \
+  --n_samples 1000 \
+  --model_name "redis/langcache-embed-v1" \
+  --full 
+
+
+# ================================
+
+uv run evaluation.py \
+  --query_log_path dataset/chatgpt_unique_sentences.csv \
+  --sentence_column sentence \
+  --output_dir ./rado_synthetic/v1 \
+  --n_samples 500 \
+  --model_name "redis/langcache-embed-v1" \
+  --full 
+
+uv run evaluation.py \
+  --query_log_path dataset/chatgpt_unique_sentences.csv \
+  --sentence_column sentence \
+  --output_dir ./rado_synthetic/v2 \
+  --n_samples 500 \
+  --model_name "redis/langcache-embed-v2" \
+  --full 
+
+uv run evaluation.py \
+  --query_log_path dataset/chatgpt_unique_sentences.csv \
+  --sentence_column sentence \
+  --output_dir ./rado_synthetic/v3 \
+  --n_samples 500 \
+  --model_name "redis/langcache-embed-v3" \
+  --full 
+
+uv run evaluation.py \
+  --query_log_path dataset/chatgpt_unique_sentences.csv \
+  --sentence_column sentence \
+  --output_dir ./rado_synthetic/v3.1 \
+  --n_samples 500 \
   --model_name "redis/langcache-embed-v3.1" \
-  --full \
-  --use_redis
+  --full 
+
+# ================================
+
+uv run evaluation.py \
+  --query_log_path dataset/vizio_unique_sentences.csv \
+  --sentence_column transcription \
+  --output_dir ./vizio/v1 \
+  --n_samples 1000 \
+  --model_name "redis/langcache-embed-v1" \
+  --full 
+
+uv run evaluation.py \
+  --query_log_path dataset/vizio_unique_sentences.csv \
+  --sentence_column transcription \
+  --output_dir ./vizio/v2 \
+  --n_samples 1000 \
+  --model_name "redis/langcache-embed-v2" \
+  --full 
+
+uv run evaluation.py \
+  --query_log_path dataset/vizio_unique_sentences.csv \
+  --sentence_column transcription \
+  --output_dir ./vizio/v3 \
+  --n_samples 1000 \
+  --model_name "redis/langcache-embed-v3" \
+  --full 
+
+uv run evaluation.py \
+  --query_log_path dataset/vizio_unique_sentences.csv \
+  --sentence_column transcription \
+  --output_dir ./vizio/v3.1 \
+  --n_samples 1000 \
+  --model_name "redis/langcache-embed-v3.1" \
+  --full 

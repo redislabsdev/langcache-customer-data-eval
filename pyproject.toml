@@ -7,10 +7,13 @@ requires-python = ">=3.13"
 dependencies = [
     "accelerate>=1.11.0",
     "boto3>=1.40.18",
+    "google-genai>=1.0.0",
     "llm-sim-eval==0.3.0",
     "matplotlib>=3.10.6",
     "numpy>=2.0.0",
+    "openai>=1.0.0",
     "pandas>=2.3.2",
+    "peft>=0.18.1",
     "pytest>=8.4.2",
     "redis>=6.4.0",
     "redisvl>=0.10.0",
@@ -30,13 +33,14 @@ only-include = [
 ]
 
 [[tool.uv.index]]
-url = "https://artifactory.dev.redislabs.com/artifactory/api/pypi/cloud-pypi-local/simple"
+url = ""
 
 [dependency-groups]
 dev = [
     "black>=25.1.0",
     "isort>=6.0.1",
     "pylint>=3.3.7",
+    "radon>=6.0.1",
 ]
 
 [tool.black]

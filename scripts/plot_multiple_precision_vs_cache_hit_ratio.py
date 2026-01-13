@@ -117,7 +117,7 @@ def main():
             continue
         
         # CHANGED: Create two subplots: one for curves, one for the AUC bar chart
-        fig, (ax_main, ax_bar) = plt.subplots(1, 2, figsize=(30, 12), gridspec_kw={'width_ratios': [2, 1]})
+        fig, (ax_main, ax_bar) = plt.subplots(1, 2, figsize=(22, 10), gridspec_kw={'width_ratios': [2, 1]})
         
         # Build color map based on retriever grouping
         all_model_names = list(model_data.keys())
@@ -229,8 +229,7 @@ def main():
             # Get color from the retriever-based color map
             color = color_map[model_name]
 
-            label_chr = f"{model_name}, AUC: {mean_auc_pchr:.3f} ± {std_auc_pchr:.3f}"
-            ax_main.plot(common_chr, mean_p_chr, label=label_chr, color=color)
+            ax_main.plot(common_chr, mean_p_chr, label=model_name, color=color)
             if valid_runs > 1:
                 ax_main.fill_between(common_chr, mean_p_chr - std_p_chr, mean_p_chr + std_p_chr, color=color, alpha=0.2)
             
@@ -264,6 +263,10 @@ def main():
             ax_bar.barh(y_pos, means, xerr=stds, color=bar_colors, align='center', capsize=5, alpha=0.8)
             ax_bar.set_yticks(y_pos)
             ax_bar.set_yticklabels(names)
+            
+            # Add AUC values as text labels on the bars
+            for i, (mean, std) in enumerate(zip(means, stds)):
+                ax_bar.text(mean + std + 0.05, i, f'{mean:.3f} ± {std:.3f}', va='center', ha='left', fontsize=12)
             ax_bar.set_xlabel("AUC")
             ax_bar.set_title("AUC Comparison")
             ax_bar.grid(axis='x', linestyle='--', alpha=0.7)

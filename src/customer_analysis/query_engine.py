@@ -2,14 +2,13 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 
 import numpy as np
 import pandas as pd
 from redisvl.index import SearchIndex
 from redisvl.query import VectorQuery
 from redisvl.schema import IndexSchema
-from sentence_transformers import SentenceTransformer
 
 try:
     import torch
@@ -19,10 +18,16 @@ except Exception:
     _HAS_TORCH = False
 
 
+def _is_api_model(model_name: str) -> bool:
+    """Check if model name refers to an API-based model (OpenAI or Gemini)."""
+    return model_name.startswith("openai/") or model_name.startswith("gemini/")
+
+
 @dataclass
 class RedisVectorIndex:
     """
-    RedisVL vector index backed by a local SentenceTransformer model.
+    RedisVL vector index backed by either a local SentenceTransformer model,
+    OpenAI embeddings API, or Gemini embeddings API.
 
     Parameters
     ----------
@@ -33,11 +38,14 @@ class RedisVectorIndex:
     prefix : str
         Document key prefix (e.g. "cache:").
     model_name : str
-        SentenceTransformer model name or local path (e.g. "all-MiniLM-L6-v2").
+        SentenceTransformer model name, local path (e.g. "all-MiniLM-L6-v2"),
+        OpenAI model with 'openai/' prefix (e.g. "openai/text-embedding-3-small"),
+        or Gemini model with 'gemini/' prefix (e.g. "gemini/text-embedding-004").
     redis_url : str
         Redis connection URL (default "redis://localhost:6379").
     device : str
         "cuda" or "cpu". If None, auto-selects CUDA when available.
+        Ignored for API-based models.
     batch_size : int
         Batch size for encoder.encode().
     additional_fields : list[dict]
@@ -54,16 +62,18 @@ class RedisVectorIndex:
     additional_fields: List[Dict[str, Any]] = field(default_factory=list)
 
     def __post_init__(self):
-        # 0) init local embedding model
-        device = self.device or ("cuda" if _HAS_TORCH and torch.cuda.is_available() else "cpu")
-        self.model = SentenceTransformer(self.model_name, device=device, local_files_only=False, trust_remote_code=True)
+        self._is_api = _is_api_model(self.model_name)
         
-        # Probe the model to get the actual output dimension
-        # (Some models report incorrect dimension in config)
-        probe = self.model.encode(["test"], convert_to_numpy=True)
-        self.embed_dim = int(probe.shape[1])
+        # Use the new embedding provider architecture
+        from src.customer_analysis.embedding_providers import get_embedding_provider
+        
+        device = self.device or ("cuda" if _HAS_TORCH and torch.cuda.is_available() else "cpu")
+        self._provider = get_embedding_provider(self.model_name, device=device)
+        
+        # Get embedding dimension
+        self.embed_dim = self._provider.get_embedding_dim()
 
-        # 1) ensure Redis index exists (schema dims come from the model)
+        # Ensure Redis index exists (schema dims come from the model)
         schema_dict = {
             "index": {"name": self.index_name, "prefix": self.prefix},
             "fields": [
@@ -87,12 +97,12 @@ class RedisVectorIndex:
         self.index.create(overwrite=True)
 
     def _embed_batch(self, texts: List[str]) -> np.ndarray:
-        vecs = self.model.encode(
+        """Embed a batch of texts using the configured provider."""
+        vecs = self._provider.encode(
             texts,
             batch_size=self.batch_size,
-            convert_to_numpy=True,
-            normalize_embeddings=False,  # leave unnormalized; Redis uses true cosine
-            show_progress_bar=False,
+            normalize=False,  # leave unnormalized; Redis uses true cosine
+            show_progress=False,
         )
         # ensure float32
         if vecs.dtype != np.float32:
@@ -138,9 +148,12 @@ class RedisVectorIndex:
             except Exception:
                 pass
         # best-effort free model memory on CUDA
-        try:
-            if _HAS_TORCH and self.model.device.type == "cuda":
-                del self.model
-                torch.cuda.empty_cache()
-        except Exception:
-            pass
+        if not self._is_api:
+            try:
+                if _HAS_TORCH and hasattr(self._provider, 'model'):
+                    model = self._provider.model
+                    if hasattr(model, 'device') and model.device.type == "cuda":
+                        del self._provider
+                        torch.cuda.empty_cache()
+            except Exception:
+                pass

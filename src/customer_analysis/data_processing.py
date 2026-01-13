@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import torch
 
-from src.customer_analysis.embedding_interface import NeuralEmbedding
+from src.customer_analysis.embedding_interface import get_embedding_model
 from src.customer_analysis.file_handler import FileHandler
 from src.customer_analysis.query_engine import RedisVectorIndex
 
@@ -145,7 +145,8 @@ def run_matching_redis(queries: pd.DataFrame, cache: pd.DataFrame, args):
 
 
 def run_matching(queries, cache, args):
-    embedding_model = NeuralEmbedding(args.model_name, device="cuda" if torch.cuda.is_available() else "cpu")
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    embedding_model = get_embedding_model(args.model_name, device=device)
     
     # Determine k for retrieval
     k = 1
