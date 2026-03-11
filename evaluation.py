@@ -253,6 +253,18 @@ if __name__ == "__main__":
     parser.add_argument(
         "--redis_batch_size", type=int, default=256, help="Batch size for Redis vector operations (default: 256)"
     )
+    parser.add_argument(
+        "--cross_encoder_model",
+        type=str,
+        default=None,
+        help="Name of the cross-encoder model to use for reranking (default: None)",
+    )
+    parser.add_argument(
+        "--rerank_k",
+        type=int,
+        default=10,
+        help="Number of candidates to rerank (default: 10)",
+    )
     args = parser.parse_args()
 
     main(args)
