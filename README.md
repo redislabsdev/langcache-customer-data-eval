@@ -160,6 +160,65 @@ uv run evaluation.py \
 
 > S3 access relies on your environment (e.g., `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`).
 
+### 4) Output
+
+Sample output.
+
+```bash
+uv run evaluation.py \
+  --query_log_path ./data/queries.csv \
+  --cache_path ./data/cache.csv \
+  --sentence_column text \
+  --output_dir ./outputs \
+  --n_samples 100 \
+  --model_name "redis/langcache-embed-v3.1"
+
+Loading data...
+Stage one: Matching...
+10:35:29 sentence_transformers.SentenceTransformer INFO   Load pretrained SentenceTransformer: redis/langcache-embed-v3.1
+modules.json: 100%|█████████████████████████████| 229/229 [00:00<00:00, 234kB/s]
+config_sentence_transformers.json: 100%|███████| 283/283 [00:00<00:00, 1.20MB/s]
+README.md: 9.53kB [00:00, 6.21MB/s]
+sentence_bert_config.json: 100%|██████████████| 57.0/57.0 [00:00<00:00, 337kB/s]
+config.json: 100%|█████████████████████████████| 612/612 [00:00<00:00, 2.54MB/s]
+model.safetensors: 100%|███████████████████| 45.1M/45.1M [00:01<00:00, 25.7MB/s]
+Some weights of BertModel were not initialized from the model checkpoint at redis/langcache-embed-v3.1 and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+tokenizer_config.json: 1.46kB [00:00, 3.47MB/s]
+vocab.txt: 232kB [00:00, 6.69MB/s]
+tokenizer.json: 712kB [00:00, 17.6MB/s]
+special_tokens_map.json: 100%|█████████████████| 695/695 [00:00<00:00, 1.39MB/s]
+config.json: 100%|██████████████████████████████| 190/190 [00:00<00:00, 714kB/s]
+Encoding and writing 2 embeddings to memmap at /var/folders/bz/fbywfzys4053m4xgkq3091zr0000gp/T/embedding_eval_memmap_tsip3y4y/rows_embeddings.dat ...
+Batches: 100%|████████████████████████████████████| 1/1 [00:00<00:00, 29.12it/s]
+Encoding (memmap)...: 100%|███████████████████████| 1/1 [00:00<00:00, 26.73it/s]
+Encoding and writing 2 embeddings to memmap at /var/folders/bz/fbywfzys4053m4xgkq3091zr0000gp/T/embedding_eval_memmap_tsip3y4y/cols_embeddings.dat ...
+Batches: 100%|███████████████████████████████████| 1/1 [00:00<00:00, 176.96it/s]
+Encoding (memmap)...: 100%|██████████████████████| 1/1 [00:00<00:00, 148.24it/s]
+Row blocks (two-sets): 100%|████████████████████| 1/1 [00:00<00:00, 2128.01it/s]
+
+============================================================
+Running Cache Hit Ratio Analysis (CHR-only mode)
+============================================================
+Saved: ./outputs/chr_matches.csv
+
+Performing threshold sweep
+Saved: ./outputs/chr_sweep.csv
+Generating plot...
+Saved: ./outputs/chr_vs_threshold.png
+
+============================================================
+Cache Hit Ratio Analysis Summary
+============================================================
+Total queries analyzed: 2
+Similarity score range: [0.5808, 0.6812]
+Mean similarity score: 0.6310
+Median similarity score: 0.6310
+============================================================
+
+Done!
+```
+
 ---
 
 ## What the script does
